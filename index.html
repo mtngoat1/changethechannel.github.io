@@ -127,6 +127,7 @@
       const [error, setError] = useState(null);
       const [loading, setLoading] = useState(true);
       const containerIdRef = useRef(`emulator-${Date.now()}`);
+      const cleanupRef = useRef(null);
 
       useEffect(() => {
         if (!game) return;
@@ -147,7 +148,6 @@
         }
 
         let blobUrl = null;
-        let scriptElement = null;
 
         const initEmulator = async () => {
           try {
@@ -158,30 +158,41 @@
               dataSize: game.data.byteLength
             });
 
+            // Create blob URL
             const blob = new Blob([game.data], { type: 'application/octet-stream' });
             blobUrl = URL.createObjectURL(blob);
             console.log('✅ Blob URL created:', blobUrl);
 
+            // Clear container
             const container = document.getElementById(containerIdRef.current);
             if (container) {
               container.innerHTML = '';
               console.log('✅ Container cleared');
             }
 
-            // Remove old EmulatorJS script
-            const oldScript = document.querySelector('script[src*="EmulatorJS"]');
-            if (oldScript) {
-              oldScript.remove();
-              console.log('🗑️ Removed old emulator script');
-            }
+            // COMPLETE cleanup of old emulator
+            const oldScripts = document.querySelectorAll('script[src*="EmulatorJS"], script[src*="emulator"], script[src*="loader.js"]');
+            oldScripts.forEach(script => {
+              script.remove();
+              console.log('🗑️ Removed old script:', script.src);
+            });
 
-            // Clear old globals
+            // Clear ALL emulator globals
             delete window.EJS_player;
             delete window.EJS_core;
             delete window.EJS_gameName;
             delete window.EJS_gameUrl;
+            delete window.EJS_pathtodata;
+            delete window.EJS_biosUrl;
+            delete window.EJS_color;
+            delete window.EJS_startOnLoaded;
+            delete window.EJS_RESET_VARS;
+            delete window.EmulatorJS;
+            
+            // Wait for cleanup
+            await new Promise(resolve => setTimeout(resolve, 500));
 
-            // Set new config
+            // Set fresh config
             window.EJS_player = `#${containerIdRef.current}`;
             window.EJS_core = core;
             window.EJS_gameName = game.name;
@@ -189,30 +200,36 @@
             window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';
             window.EJS_color = '#6B21A8';
             window.EJS_startOnLoaded = true;
+            window.EJS_RESET_VARS = true;
 
             console.log('✅ EmulatorJS config set:', {
               player: window.EJS_player,
               core: window.EJS_core,
-              gameUrl: window.EJS_gameUrl
+              gameUrl: blobUrl.substring(0, 50) + '...'
             });
 
-            // Load EmulatorJS
-            scriptElement = document.createElement('script');
-            scriptElement.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js';
+            // Load fresh EmulatorJS with cache busting
+            const script = document.createElement('script');
+            script.src = `https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js?t=${Date.now()}`;
+            script.id = 'emulator-loader';
             
-            scriptElement.onload = () => {
+            script.onload = () => {
               console.log('✅ EmulatorJS script loaded successfully');
-              setTimeout(() => setLoading(false), 2000);
+              setTimeout(() => {
+                setLoading(false);
+                console.log('🎮 Emulator should be running now');
+              }, 3000);
             };
 
-            scriptElement.onerror = (e) => {
+            script.onerror = (e) => {
               console.error('❌ Failed to load EmulatorJS script:', e);
-              setError('Failed to load emulator. Please try again.');
+              setError('Failed to load emulator library');
               setLoading(false);
             };
 
-            document.body.appendChild(scriptElement);
-            console.log('📦 EmulatorJS script added to page');
+            document.head.appendChild(script);
+            cleanupRef.current = script;
+            console.log('📦 EmulatorJS loader added to page');
 
           } catch (err) {
             console.error('❌ Emulator initialization error:', err);
@@ -224,24 +241,25 @@
         initEmulator();
 
         return () => {
-          console.log('🧹 Cleaning up emulator...');
+          console.log('🧹 Starting cleanup...');
+          
           if (blobUrl) {
             URL.revokeObjectURL(blobUrl);
+            console.log('🧹 Blob URL revoked');
           }
           
-          if (scriptElement && scriptElement.parentNode) {
-            scriptElement.remove();
+          if (cleanupRef.current && cleanupRef.current.parentNode) {
+            cleanupRef.current.remove();
+            console.log('🧹 Script removed');
           }
 
           const container = document.getElementById(containerIdRef.current);
           if (container) {
             container.innerHTML = '';
+            console.log('🧹 Container cleared');
           }
 
-          delete window.EJS_player;
-          delete window.EJS_core;
-          delete window.EJS_gameName;
-          delete window.EJS_gameUrl;
+          // Don't delete globals on cleanup - let them persist for re-initialization
         };
       }, [game]);
 
@@ -305,19 +323,27 @@
         4: { videoIndex: 0, key: 0 },
       });
 
-      const channels = [
+            const channels = [
         {
           id: 1,
           name: 'NICKELODEON',
           videos: [
             'https://www.dropbox.com/scl/fi/0qhbxc2b1owo9sxcxa0jd/nick-halloween-block.mp4?rlkey=xly50ft4owo9zv45atkvonbzu&st=7fzpqayr&raw=1',
             'https://www.dropbox.com/scl/fi/0kx6kuhz626w2ff5otupp/716-1.mp4?rlkey=yna7t1kngnjopq9rwo0mej2dt&st=sju64tr4&raw=1',
-            'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&st=p9ywopri&raw=1'
+            'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&st=p9ywopri&raw=1',
+            'https://www.dropbox.com/scl/fi/jwhoxq74sdlgn6e3flsyg/Spongebob-Graveyard-Shift-Airing.mp4?rlkey=inxptpawamqbt1jwwoh9anol3&st=5u7fkp8q&raw=1',
+            'https://www.dropbox.com/scl/fi/dsi4esqdoz14952m4hzq4/Jimmy-Neutron-Marathon-June-21-2007-Disc-1.mp4?rlkey=zw3e6wshthzbvihrksm099nl0&st=oxem21rb&raw=1',
+            'https://www.dropbox.com/scl/fi/ikjg2dgcnou5voskzlali/7h9-F-ir1y-066p-r9n15-Ch-nn91-Ch-59r5-1.mp4?rlkey=ffmvjedudj9lu2kz5h3ihw6l4&st=rehd0ni2&raw=1',
+            'https://www.dropbox.com/scl/fi/d0k90sw5vrzstwy10az71/716-2.mp4?rlkey=z4487ctdhorhj47514cnh5xq1&st=nqxoo09x&raw=1'
           ],
           schedule: [
             { title: 'Nick Halloween', hour: 12, minute: 0, videoIndex: 0 },
             { title: 'SpongeBash Special', hour: 2, minute: 45, videoIndex: 1 },
-            { title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 }
+            { title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 },
+            { title: 'Graveyard Shift', hour: 5, minute: 10, videoIndex: 3 },
+            { title: 'Jimmy Neutron Marathon', hour: 5, minute: 35, videoIndex: 4 },
+            { title: 'Fairly Odd Parents Marathon', hour: 7, minute: 35, videoIndex: 5 },
+            { title: 'SpongeBash Special 2 ', hour: 9, minute: 50, videoIndex: 6 }
           ]
         },
         {
@@ -325,11 +351,75 @@
           name: 'CARTOON NETWORK',
           videos: [
             'https://www.dropbox.com/scl/fi/v88t8aoxt17uh1pqo42ch/live_user_livetoons10_1357606766.flv.mp4?rlkey=6w7m1ee8qfwstww3m8g25hmin&st=plw085je&raw=1',
-            'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&st=oaxb01u2&raw=1'
+            'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&st=oaxb01u2&raw=1', 
+            'https://www.dropbox.com/scl/fi/v5fizu9tb9yqbt3aj3ryk/live_user_livetoons10_1358816393.mp4?rlkey=55prgq8uk3ifvfw9vxgdvh3d3&st=oyva12v1&raw=1',
+            'https://www.dropbox.com/scl/fi/bn20pbb91s26lzbdmwvkh/live_user_livetoons10_1358899176.mp4?rlkey=92kekb0yvufcyh7j2clbrro8t&st=hfqsjpaq&raw=1',
+            'https://www.dropbox.com/scl/fi/fsrn8w8bxchbwecrogy16/live_user_livetoons10_1359421185.flv.mp4?rlkey=pek6z0ep4as5qkhvmoccf346t&st=x4hvp8c0&raw=1',
+            'https://www.dropbox.com/scl/fi/02rg3k5paas5fiexosn0m/VTS_01_1.mp4?rlkey=2id1qj9codi3ql3rdztvyvbly&st=1liizih6&raw=1',
+            'https://www.dropbox.com/scl/fi/qovomj0q2v7rmu5gxboka/VTS_02_1.mp4?rlkey=9qbxn4wcnm8q2e3l2f3bjz66r&st=bwh2598s&raw=1',
+            'https://www.dropbox.com/scl/fi/21yepjjlti1jfz5grh8e2/VTS_02_2.mp4?rlkey=tstp73n8kyg8lb8ms2azjoadi&st=j21ztx3n&raw=1',
+            'https://www.dropbox.com/scl/fi/ypz45myxzj356cd5mcjro/Tape-25-CARTOON-NETWORK-BOOMERANG-VOL.-2-2012-2013-2015-PART-1.mp4?rlkey=bdwdjccljg2ie4te0472o9ulw&st=wflfyq3v&raw=1'
           ],
           schedule: [
             { title: 'Regular Show', hour: 12, minute: 0, videoIndex: 0 },
-            { title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 }
+            { title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 },
+            { title: 'Regular Show', hour: 1, minute: 0, videoIndex: 2 },
+            { title: 'The Amazing World Of Gumball', hour: 1, minute: 30, videoIndex: 3 },
+            { title: 'Regular Show', hour: 2, minute: 0, videoIndex: 4 },
+            { title: 'Chowder', hour: 2, minute: 30, videoIndex: 5 },
+            { title: 'Chowder/Flapjack', hour: 3, minute: 0, videoIndex: 6 },
+            { title: 'Flapjack', hour: 3, minute: 20, videoIndex: 7 },
+            { title: 'Fosters Home for Imaginary Friends', hour: 3, minute: 40, videoIndex: 8 },
+          ]
+        },
+        {
+          id: 3,
+          name: 'ADULT SWIM',
+          videos: [
+            'https://www.dropbox.com/scl/fi/r3f7o7ij3p92wskw2txf2/z303-as026-_Adult_Swim_07.03.05-1.mp4?rlkey=ho4zmqo62b6pjfxcrbyemf477&st=527poo3c&raw=1',
+            'https://www.dropbox.com/scl/fi/fhffgqtmtsl6wspuhwz75/VTS_01_3.mp4?rlkey=rm7c9qv28gawzrowp0nf87f8y&st=4mi06aoj&raw=1',
+            'https://www.dropbox.com/scl/fi/ygggf6j7ca30z3j6g37a9/Family-Guy-Myspleen-003.mp4?rlkey=jjnzgc6fawyvu5ay11uhqljc7&st=i1dcvxal&raw=1',
+            'https://www.dropbox.com/scl/fi/odjks7bqt4g1evpp35pi3/Family-Guy-Myspleen-007.mp4?rlkey=piqclzcgr4jzxnod6mh8m05ck&st=m67vvjd7&raw=1',
+            'https://www.dropbox.com/scl/fi/qaac0rhj03k0rex4cf6oe/Family-Guy-Myspleen-74.mp4?rlkey=0vdk9u02pgqu7lqumdxg8a2fz&st=5sn28zoe&raw=1'
+          ],
+          schedule: [
+            { title: 'Family Guy', hour: 22, minute: 0, videoIndex: 0 },
+            { title: 'American Dad', hour: 22, minute: 30, videoIndex: 1 },
+            { title: 'Futurama/Aqua Teen Hunger Force', hour: 23, minute: 30, videoIndex: 2 },
+            { title: 'Family Guy', hour: 24, minute: 0, videoIndex: 3 },
+            { title: 'Family Guy', hour: 24, minute: 30, videoIndex: 4 },
+            { title: 'Family Guy', hour: 25, minute: 0, videoIndex: 5 }
+          ]
+        },
+        {
+          id: 4,
+          name: 'DISNEY',
+          videos: [
+            'https://www.dropbox.com/scl/fi/ojk72t6fu6xqsh6ifka6q/The-Suite-Life-of-Zack-amp-Cody-Big-Hair-and-Baseball-2009-11-16-0.mp4?rlkey=rfl2qldsr6tvct4i63ejjn1ol&st=jjhwel09&raw=1',
+            'https://www.dropbox.com/scl/fi/g327hug98rglpr0up48dx/Kick.Buttowski.Suburban.Daredevil.S01E39E40.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=0tzfsp95ifnf61zl5jqtcebsx&st=ww6q42lf&raw=1',
+            'https://www.dropbox.com/scl/fi/40tp46lyqrw1d3oqx0o68/Kick.Buttowski.Suburban.Daredevil.S01E35E36.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=4ixrvdv5tzcan0s86nnqhn9ym&st=w0wa9y7v&raw=1',
+            'https://www.dropbox.com/scl/fi/u89sv95hzxwv61jwovv7a/Kick.Buttowski.Suburban.Daredevil.S01E21E22.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.mp4?rlkey=2snodpvkhaar86nhfuluw0tc3&st=cliv6uro&raw=1',
+            'https://www.dropbox.com/scl/fi/cmn3685iwl94qvrusl2wh/Good-Luck-Charlie-2010-S02E05.mp4?rlkey=3l9wogldnw0675004atsf5r1j&st=c5bd1x6f&raw=1',
+            'https://www.dropbox.com/scl/fi/bsnxykphfw9ct5u9d96wj/Good-Luck-Charlie-2010-S02E02.mp4?rlkey=y6k78wel1izytirw2q7vgnj1l&st=fwjhv1oi&raw=1',
+            'https://www.dropbox.com/scl/fi/kqrwtgsdmzogyphnx4swn/videoplayback-3.mp4?rlkey=99aqvdg830spb90g2e4vtt8m3&st=ocfr38ol&raw=1',
+            'https://www.dropbox.com/scl/fi/iklezqsorssrijrlo6wh6/Good-Luck-Charlie-2010-S02E01.mp4?rlkey=dam28lh70i0zprb37f5565osx&st=o35exo8h&raw=1',
+            'https://www.dropbox.com/scl/fi/1ciywqxo7wfqmzx1bsck3/S1E13-Boss-Mabel.ia.mp4?rlkey=eseuishqjjy66aioo55clpb07&st=n8m1fr0s&raw=1',
+            'https://www.dropbox.com/scl/fi/vyr4pdh5pi8e7b28k3vqi/S1E12-Summerween.ia.mp4?rlkey=rgoh7q0oybimdgkeezp08yfus&st=cf1lvmcn&raw=1',
+            'https://www.dropbox.com/scl/fi/hse4mqdv02vl81ra1bts0/Phineas-and-Ferb-S02E21-E22-Lets-Take-a-Quiz-At-the-Car-Wash-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=au6mvrf2itnchejqq1sog1sc2&st=b7q83kcb&raw=1',
+            'https://www.dropbox.com/scl/fi/4q9jskzualah6fgvbjzhz/Phineas-and-Ferb-S02E30-E31-Not-Phineas-and-Ferb-Phineas-and-Ferb-Busters-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=52cnp23o1t1yvtaz2m76akvtg&st=16x7bq0i&raw=1'
+          ],
+          schedule: [
+            { title: 'Suite Life of Zack & Cody', hour: 8, minute: 0, videoIndex: 0 },
+            { title: 'Kick Buttowski', hour: 8, minute: 30, videoIndex: 2 },
+            { title: 'Kick Buttowski', hour: 9, minute: 0, videoIndex: 3 },
+            { title: 'Kick Buttowski', hour: 9, minute: 30, videoIndex: 4 },
+            { title: 'Good Luck Charlie', hour: 10, minute: 0, videoIndex: 5 },
+            { title: 'Good Luck Charlie', hour: 10, minute: 30, videoIndex: 6},
+            { title: 'Good Luck Charlie', hour: 11, minute: 0, videoIndex: 7},
+            { title: 'Gravity Falls', hour: 11, minute: 0, videoIndex: 8},
+            { title: 'Gravity Falls', hour: 11, minute: 30, videoIndex: 9},
+            { title: 'Phineas and Ferb', hour: 12, minute: 0, videoIndex: 10},
+            { title: 'Phineas and Ferb', hour: 12, minute: 30, videoIndex: 11}
           ]
         }
       ];
