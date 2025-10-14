@@ -1,1016 +1,1000 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change The Channel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <style>
+    #emulator-container {
+      width: 100%;
+      height: 100%;
+      min-height: 600px;
+    }
   </style>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail:', err));
+    });
+  }
+</script>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Change The Channel&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="manifest" href="/manifest.json"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#000000"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#emulator-container {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>min-height: 600px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if ('serviceWorker' in navigator) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>window.addEventListener('load', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>navigator.serviceWorker.register('/sw.js').catch(err =&gt; console.log('SW fail:', err));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="root"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script type="text/babel"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const { useState, useRef, useEffect } = React;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const PixelClock = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [time, setTime] = useState(new Date());</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const timer = setInterval(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setTime(new Date());</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, 1000);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return () =&gt; clearInterval(timer);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}, []);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const formatTime = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return time.toLocaleTimeString('en-US', {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>hour: '2-digit',<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>minute: '2-digit',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>second: '2-digit',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>hour12: true<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="flex items-center gap-2 bg-gray-900 px-4 py-2 rounded border-2 border-green-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;span className="text-green-400 font-mono text-lg font-bold tracking-wider"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{formatTime()}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Play = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;polygon points="5 3 19 12 5 21 5 3"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Pause = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect width="4" height="16" x="6" y="4"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect width="4" height="16" x="14" y="4"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Tv = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect width="20" height="15" x="2" y="7" rx="2" ry="2"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;polyline points="17 2 12 7 7 2"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Power = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M12 2v10"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M18.4 6.6a9 9 0 1 1-12.77.04"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Maximize = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M8 3H5a2 2 0 0 0-2 2v3"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M21 8V5a2 2 0 0 0-2-2h-3"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M3 16v3a2 2 0 0 0 2 2h3"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M16 21h3a2 2 0 0 0 2-2v-3"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Gamepad2 = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="6" x2="10" y1="12" y2="12"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="8" x2="8" y1="10" y2="14"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="15" x2="15.01" y1="13" y2="13"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="18" x2="18.01" y1="11" y2="11"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;rect width="20" height="12" x="2" y="6" rx="2"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Upload = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;polyline points="17 8 12 3 7 8"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="12" x2="12" y1="3" y2="15"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const X = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="18" x2="6" y1="6" y2="18"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="6" x2="18" y1="6" y2="18"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const Trash2 = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;polyline points="3 6 5 6 21 6"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="10" x2="10" y1="11" y2="17"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="14" x2="14" y1="11" y2="17"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const PLATFORMS = {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>DOS: { name: 'DOS', ext: ['.exe', '.com', '.bat'], description: 'DOS/Windows 95 Games', core: 'dos' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>NES: { name: 'NES', ext: ['.nes', '.zip'], description: 'Nintendo Entertainment System', core: 'nes' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>SNES: { name: 'SNES', ext: ['.smc', '.sfc', '.zip'], description: 'Super Nintendo', core: 'snes' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>GEN: { name: 'Genesis', ext: ['.md', '.gen', '.zip'], description: 'Sega Genesis', core: 'segaMD' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>GB: { name: 'Game Boy', ext: ['.gb', '.gbc', '.zip'], description: 'Game Boy/Color', core: 'gb' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>PSX: { name: 'PlayStation', ext: ['.iso', '.cue', '.bin'], description: 'PlayStation 1', core: 'psx' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>N64: { name: 'N64', ext: ['.z64', '.n64', '.zip'], description: 'Nintendo 64', core: 'n64' },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>GBA: { name: 'GBA', ext: ['.gba', '.zip'], description: 'Game Boy Advance', core: 'gba' }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const EmulatorContainer = ({ game }) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [error, setError] = useState(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [loading, setLoading] = useState(true);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const emulatorInstanceRef = useRef(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const containerIdRef = useRef(`emulator-${Date.now()}`);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!game) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const platformMap = {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'DOS': 'dos',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'NES': 'nes',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'SNES': 'snes',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'Genesis': 'segaMD',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'Game Boy': 'gb',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'GBA': 'gba',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'N64': 'n64',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'PlayStation': 'psx'</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const core = platformMap[game.platform];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!core) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setError('Unsupported platform: ' + game.platform);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let blobUrl = null;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const initEmulator = async () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Create blob from ArrayBuffer</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const blob = new Blob([game.data], { type: 'application/octet-stream' });</p>
-<p class="p1"><span class="Apple-converted-space">            </span>blobUrl = URL.createObjectURL(blob);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>console.log('Initializing emulator:', {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>platform: game.platform,</p>
-<p class="p1"><span class="Apple-converted-space">              </span>core: core,</p>
-<p class="p1"><span class="Apple-converted-space">              </span>name: game.name,</p>
-<p class="p1"><span class="Apple-converted-space">              </span>dataSize: game.data.byteLength</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Clear any existing emulator instance</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById(containerIdRef.current);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (container) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>container.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Configure EmulatorJS</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_player = `#${containerIdRef.current}`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_core = core;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_gameName = game.name;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_gameUrl = blobUrl;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_biosUrl = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/bios/';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_color = '#6B21A8';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_startOnLoaded = true;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.EJS_RESET_VARS = true;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Remove old script if exists</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const oldScript = document.querySelector('script[src*="EmulatorJS"]');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (oldScript) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>oldScript.remove();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Load EmulatorJS</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const script = document.createElement('script');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>script.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>script.onload = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>console.log('EmulatorJS loaded successfully');</p>
-<p class="p1"><span class="Apple-converted-space">              </span>setLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>script.onerror = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>setError('Failed to load emulator script');</p>
-<p class="p1"><span class="Apple-converted-space">              </span>setLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(script);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>emulatorInstanceRef.current = script;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>console.error('Emulator initialization error:', err);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setError('Failed to initialize: ' + err.message);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>initEmulator();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>return () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>// Cleanup</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (blobUrl) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>URL.revokeObjectURL(blobUrl);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (emulatorInstanceRef.current &amp;&amp; emulatorInstanceRef.current.parentNode) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>emulatorInstanceRef.current.remove();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>const container = document.getElementById(containerIdRef.current);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (container) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>// Clean up globals</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_player;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_core;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_gameName;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_gameUrl;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_pathtodata;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>delete window.EJS_biosUrl;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}, [game]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (error) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="w-full h-full bg-gray-950 rounded-lg border-4 border-red-600 flex items-center justify-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-center text-red-400 font-mono p-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-2xl mb-4"&gt;⚠️&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="mb-2 text-lg"&gt;Error Loading Game&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-sm mb-4"&gt;{error}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-xs text-gray-500"&gt;Platform: {game.platform}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-xs text-gray-500 mt-2"&gt;File: {game.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-xs text-gray-600 mt-4"&gt;Try a different ROM file&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="w-full h-full bg-black rounded-lg border-4 border-purple-600 overflow-hidden relative" style={{ minHeight: '600px' }}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id={containerIdRef.current} className="w-full h-full" style={{ minHeight: '600px' }}&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>{loading &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-center text-purple-400 font-mono"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-xl mb-2"&gt;Loading Emulator...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-sm text-gray-400 mt-2"&gt;{game.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-xs text-gray-500 mt-1"&gt;Platform: {game.platform}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-xs text-gray-600 mt-4"&gt;This may take a moment...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>function App() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [isLoggedIn, setIsLoggedIn] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [username, setUsername] = useState('');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [password, setPassword] = useState('');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [currentChannel, setCurrentChannel] = useState(1);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [tvOn, setTvOn] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [showChannelInfo, setShowChannelInfo] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [rolledUsername, setRolledUsername] = useState('');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [rolledPassword, setRolledPassword] = useState('');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [isRollingUser, setIsRollingUser] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [isRollingPass, setIsRollingPass] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [showArcade, setShowArcade] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [arcadeView, setArcadeView] = useState('library');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [selectedArcadePlatform, setSelectedArcadePlatform] = useState(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [arcadeGames, setArcadeGames] = useState({});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [uploadProgress, setUploadProgress] = useState(0);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [runningGame, setRunningGame] = useState(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const containerRef = useRef(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const channelVideoRefs = useRef({});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const fileInputRef = useRef(null);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const [channelStates, setChannelStates] = useState({</p>
-<p class="p1"><span class="Apple-converted-space">        </span>1: { videoIndex: 0, key: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>2: { videoIndex: 0, key: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>3: { videoIndex: 0, key: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>4: { videoIndex: 0, key: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const channels = [</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id: 1,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name: 'NICKELODEON',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>videos: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/0qhbxc2b1owo9sxcxa0jd/nick-halloween-block.mp4?rlkey=xly50ft4owo9zv45atkvonbzu&amp;st=7fzpqayr&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/0kx6kuhz626w2ff5otupp/716-1.mp4?rlkey=yna7t1kngnjopq9rwo0mej2dt&amp;st=sju64tr4&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&amp;st=p9ywopri&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/jwhoxq74sdlgn6e3flsyg/Spongebob-Graveyard-Shift-Airing.mp4?rlkey=inxptpawamqbt1jwwoh9anol3&amp;st=5u7fkp8q&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/dsi4esqdoz14952m4hzq4/Jimmy-Neutron-Marathon-June-21-2007-Disc-1.mp4?rlkey=zw3e6wshthzbvihrksm099nl0&amp;st=oxem21rb&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/ikjg2dgcnou5voskzlali/7h9-F-ir1y-066p-r9n15-Ch-nn91-Ch-59r5-1.mp4?rlkey=ffmvjedudj9lu2kz5h3ihw6l4&amp;st=rehd0ni2&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/d0k90sw5vrzstwy10az71/716-2.mp4?rlkey=z4487ctdhorhj47514cnh5xq1&amp;st=nqxoo09x&amp;raw=1'</p>
-<p class="p1"><span class="Apple-converted-space">          </span>],</p>
-<p class="p1"><span class="Apple-converted-space">          </span>schedule: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Nick Halloween', hour: 12, minute: 0, videoIndex: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'SpongeBash Special', hour: 2, minute: 45, videoIndex: 1 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Graveyard Shift', hour: 5, minute: 10, videoIndex: 3 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Jimmy Neutron Marathon', hour: 5, minute: 35, videoIndex: 4 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Fairly Odd Parents Marathon', hour: 7, minute: 35, videoIndex: 5 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'SpongeBash Special 2 ', hour: 9, minute: 50, videoIndex: 6 }</p>
-<p class="p1"><span class="Apple-converted-space">          </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id: 2,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name: 'CARTOON NETWORK',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>videos: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/v88t8aoxt17uh1pqo42ch/live_user_livetoons10_1357606766.flv.mp4?rlkey=6w7m1ee8qfwstww3m8g25hmin&amp;st=plw085je&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&amp;st=oaxb01u2&amp;raw=1',<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/v5fizu9tb9yqbt3aj3ryk/live_user_livetoons10_1358816393.mp4?rlkey=55prgq8uk3ifvfw9vxgdvh3d3&amp;st=oyva12v1&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/bn20pbb91s26lzbdmwvkh/live_user_livetoons10_1358899176.mp4?rlkey=92kekb0yvufcyh7j2clbrro8t&amp;st=hfqsjpaq&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/fsrn8w8bxchbwecrogy16/live_user_livetoons10_1359421185.flv.mp4?rlkey=pek6z0ep4as5qkhvmoccf346t&amp;st=x4hvp8c0&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/02rg3k5paas5fiexosn0m/VTS_01_1.mp4?rlkey=2id1qj9codi3ql3rdztvyvbly&amp;st=1liizih6&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/qovomj0q2v7rmu5gxboka/VTS_02_1.mp4?rlkey=9qbxn4wcnm8q2e3l2f3bjz66r&amp;st=bwh2598s&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/21yepjjlti1jfz5grh8e2/VTS_02_2.mp4?rlkey=tstp73n8kyg8lb8ms2azjoadi&amp;st=j21ztx3n&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/ypz45myxzj356cd5mcjro/Tape-25-CARTOON-NETWORK-BOOMERANG-VOL.-2-2012-2013-2015-PART-1.mp4?rlkey=bdwdjccljg2ie4te0472o9ulw&amp;st=wflfyq3v&amp;raw=1'</p>
-<p class="p1"><span class="Apple-converted-space">          </span>],</p>
-<p class="p1"><span class="Apple-converted-space">          </span>schedule: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Regular Show', hour: 12, minute: 0, videoIndex: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Regular Show', hour: 1, minute: 0, videoIndex: 2 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'The Amazing World Of Gumball', hour: 1, minute: 30, videoIndex: 3 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Regular Show', hour: 2, minute: 0, videoIndex: 4 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Chowder', hour: 2, minute: 30, videoIndex: 5 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Chowder/Flapjack', hour: 3, minute: 0, videoIndex: 6 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Flapjack', hour: 3, minute: 20, videoIndex: 7 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Fosters Home for Imaginary Friends', hour: 3, minute: 40, videoIndex: 8 },</p>
-<p class="p1"><span class="Apple-converted-space">          </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id: 3,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name: 'ADULT SWIM',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>videos: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/r3f7o7ij3p92wskw2txf2/z303-as026-_Adult_Swim_07.03.05-1.mp4?rlkey=ho4zmqo62b6pjfxcrbyemf477&amp;st=527poo3c&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/fhffgqtmtsl6wspuhwz75/VTS_01_3.mp4?rlkey=rm7c9qv28gawzrowp0nf87f8y&amp;st=4mi06aoj&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/ygggf6j7ca30z3j6g37a9/Family-Guy-Myspleen-003.mp4?rlkey=jjnzgc6fawyvu5ay11uhqljc7&amp;st=i1dcvxal&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/odjks7bqt4g1evpp35pi3/Family-Guy-Myspleen-007.mp4?rlkey=piqclzcgr4jzxnod6mh8m05ck&amp;st=m67vvjd7&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/qaac0rhj03k0rex4cf6oe/Family-Guy-Myspleen-74.mp4?rlkey=0vdk9u02pgqu7lqumdxg8a2fz&amp;st=5sn28zoe&amp;raw=1'</p>
-<p class="p1"><span class="Apple-converted-space">          </span>],</p>
-<p class="p1"><span class="Apple-converted-space">          </span>schedule: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Family Guy', hour: 22, minute: 0, videoIndex: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'American Dad', hour: 22, minute: 30, videoIndex: 1 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Futurama/Aqua Teen Hunger Force', hour: 23, minute: 30, videoIndex: 2 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Family Guy', hour: 24, minute: 0, videoIndex: 3 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Family Guy', hour: 24, minute: 30, videoIndex: 4 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Family Guy', hour: 25, minute: 0, videoIndex: 5 }</p>
-<p class="p1"><span class="Apple-converted-space">          </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id: 4,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name: 'DISNEY',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>videos: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/ojk72t6fu6xqsh6ifka6q/The-Suite-Life-of-Zack-amp-Cody-Big-Hair-and-Baseball-2009-11-16-0.mp4?rlkey=rfl2qldsr6tvct4i63ejjn1ol&amp;st=jjhwel09&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/g327hug98rglpr0up48dx/Kick.Buttowski.Suburban.Daredevil.S01E39E40.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=0tzfsp95ifnf61zl5jqtcebsx&amp;st=ww6q42lf&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/40tp46lyqrw1d3oqx0o68/Kick.Buttowski.Suburban.Daredevil.S01E35E36.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=4ixrvdv5tzcan0s86nnqhn9ym&amp;st=w0wa9y7v&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/u89sv95hzxwv61jwovv7a/Kick.Buttowski.Suburban.Daredevil.S01E21E22.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.mp4?rlkey=2snodpvkhaar86nhfuluw0tc3&amp;st=cliv6uro&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/cmn3685iwl94qvrusl2wh/Good-Luck-Charlie-2010-S02E05.mp4?rlkey=3l9wogldnw0675004atsf5r1j&amp;st=c5bd1x6f&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/bsnxykphfw9ct5u9d96wj/Good-Luck-Charlie-2010-S02E02.mp4?rlkey=y6k78wel1izytirw2q7vgnj1l&amp;st=fwjhv1oi&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/kqrwtgsdmzogyphnx4swn/videoplayback-3.mp4?rlkey=99aqvdg830spb90g2e4vtt8m3&amp;st=ocfr38ol&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/iklezqsorssrijrlo6wh6/Good-Luck-Charlie-2010-S02E01.mp4?rlkey=dam28lh70i0zprb37f5565osx&amp;st=o35exo8h&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/1ciywqxo7wfqmzx1bsck3/S1E13-Boss-Mabel.ia.mp4?rlkey=eseuishqjjy66aioo55clpb07&amp;st=n8m1fr0s&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/vyr4pdh5pi8e7b28k3vqi/S1E12-Summerween.ia.mp4?rlkey=rgoh7q0oybimdgkeezp08yfus&amp;st=cf1lvmcn&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/hse4mqdv02vl81ra1bts0/Phineas-and-Ferb-S02E21-E22-Lets-Take-a-Quiz-At-the-Car-Wash-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=au6mvrf2itnchejqq1sog1sc2&amp;st=b7q83kcb&amp;raw=1',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'https://www.dropbox.com/scl/fi/4q9jskzualah6fgvbjzhz/Phineas-and-Ferb-S02E30-E31-Not-Phineas-and-Ferb-Phineas-and-Ferb-Busters-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=52cnp23o1t1yvtaz2m76akvtg&amp;st=16x7bq0i&amp;raw=1'</p>
-<p class="p1"><span class="Apple-converted-space">          </span>],</p>
-<p class="p1"><span class="Apple-converted-space">          </span>schedule: [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Suite Life of Zack &amp; Cody', hour: 8, minute: 0, videoIndex: 0 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Kick Buttowski', hour: 8, minute: 30, videoIndex: 2 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Kick Buttowski', hour: 9, minute: 0, videoIndex: 3 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Kick Buttowski', hour: 9, minute: 30, videoIndex: 4 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Good Luck Charlie', hour: 10, minute: 0, videoIndex: 5 },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Good Luck Charlie', hour: 10, minute: 30, videoIndex: 6},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Good Luck Charlie', hour: 11, minute: 0, videoIndex: 7},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Gravity Falls', hour: 11, minute: 0, videoIndex: 8},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Gravity Falls', hour: 11, minute: 30, videoIndex: 9},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Phineas and Ferb', hour: 12, minute: 0, videoIndex: 10},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ title: 'Phineas and Ferb', hour: 12, minute: 30, videoIndex: 11}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const formatScheduleTime = (hour, minute) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const period = hour &gt;= 12 ? 'PM' : 'AM';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const displayHour = hour % 12 || 12;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const displayMinute = minute.toString().padStart(2, '0');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return `${displayHour}:${displayMinute} ${period}`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const getCurrentShow = (channelId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const channel = channels.find(ch =&gt; ch.id === channelId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!channel) return null;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const now = new Date();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const currentMinutes = now.getHours() * 60 + now.getMinutes();</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentShow = null;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt; channel.schedule.length; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const showMinutes = channel.schedule[i].hour * 60 + channel.schedule[i].minute;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const nextShowMinutes = i &lt; channel.schedule.length - 1<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>? channel.schedule[i + 1].hour * 60 + channel.schedule[i + 1].minute</p>
-<p class="p1"><span class="Apple-converted-space">            </span>: 24 * 60;</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (currentMinutes &gt;= showMinutes &amp;&amp; currentMinutes &lt; nextShowMinutes) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentShow = channel.schedule[i];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>break;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>return currentShow;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const handleScheduleClick = (channelId, videoIndex) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setCurrentChannel(channelId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setChannelStates(prev =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">          </span>...prev,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>[channelId]: {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>videoIndex: videoIndex,</p>
-<p class="p1"><span class="Apple-converted-space">            </span>key: prev[channelId].key + 1</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}));</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setShowChannelInfo(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!tvOn) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setTvOn(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const rollUsername = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setIsRollingUser(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let count = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const interval = setInterval(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const randomNum = Math.floor(Math.random() * 99) + 1;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setRolledUsername(`user${randomNum}`);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>count++;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (count &gt;= 20) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(interval);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setIsRollingUser(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, 50);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const rollPassword = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setIsRollingPass(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let count = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const interval = setInterval(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const randomPass = Math.floor(Math.random() * 10000).toString().padStart(4, '0');</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setRolledPassword(randomPass);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>count++;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (count &gt;= 20) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(interval);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setIsRollingPass(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, 50);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const handleLogin = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (username === rolledUsername &amp;&amp; password === rolledPassword) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setIsLoggedIn(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>alert('Invalid credentials. Please use the rolled username and password.');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const handleChannelChange = (channelId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setCurrentChannel(channelId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setShowChannelInfo(true);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const togglePower = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setTvOn(!tvOn);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const toggleFullscreen = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const element = containerRef.current;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (element) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (element.requestFullscreen) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>element.requestFullscreen();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} else if (element.webkitRequestFullscreen) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>element.webkitRequestFullscreen();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} else if (element.mozRequestFullScreen) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>element.mozRequestFullScreen();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} else if (element.msRequestFullscreen) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>element.msRequestFullscreen();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const currentChannelData = channels.find(ch =&gt; ch.id === currentChannel);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const handleVideoEnd = (channelId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const channel = channels.find(ch =&gt; ch.id === channelId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const nextIndex = (channelStates[channelId].videoIndex + 1) % channel.videos.length;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setChannelStates(prev =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">          </span>...prev,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>[channelId]: {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>videoIndex: nextIndex,</p>
-<p class="p1"><span class="Apple-converted-space">            </span>key: prev[channelId].key + 1</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}));</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const handleFileUploadArcade = (e, platformKey) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const files = Array.from(e.target.files);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const platform = PLATFORMS[platformKey];</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>files.forEach(file =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setUploadProgress(Math.random() * 50);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const reader = new FileReader();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>reader.onload = (event) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const gameData = {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: file.name,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>platform: platform.name,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>platformKey: platformKey,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>data: event.target.result,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>id: `${platformKey}-${Date.now()}-${Math.random()}`</p>
-<p class="p1"><span class="Apple-converted-space">              </span>};</p>
-<p class="p1"><span class="Apple-converted-space">              </span>setArcadeGames(prev =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">                </span>...prev,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>[platformKey]: [...(prev[platformKey] || []), gameData]</p>
-<p class="p1"><span class="Apple-converted-space">              </span>}));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>reader.readAsArrayBuffer(file);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setUploadProgress(100);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; setUploadProgress(0), 1000);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}, 500);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (fileInputRef.current) fileInputRef.current.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const deleteArcadeGame = (gameId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setArcadeGames(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const updated = { ...prev };</p>
-<p class="p1"><span class="Apple-converted-space">          </span>Object.keys(updated).forEach(platform =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updated[platform] = updated[platform].filter(g =&gt; g.id !== gameId);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (updated[platform].length === 0) delete updated[platform];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return updated;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const launchArcadeGame = (game) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setRunningGame(game);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setArcadeView('playing');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const closeArcadeGame = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setRunningGame(null);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setArcadeView('library');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (tvOn) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>Object.keys(channelVideoRefs.current).forEach(channelId =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const video = channelVideoRefs.current[channelId];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (video) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>video.play().catch(err =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>console.log('Play was prevented:', err);</p>
-<p class="p1"><span class="Apple-converted-space">              </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>Object.keys(channelVideoRefs.current).forEach(channelId =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const video = channelVideoRefs.current[channelId];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (video) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>video.pause();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}, [tvOn]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (showChannelInfo) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const timer = setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setShowChannelInfo(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}, 5000);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return () =&gt; clearTimeout(timer);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}, [showChannelInfo]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (!isLoggedIn) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="min-h-screen bg-black flex items-center justify-center p-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-gray-800 rounded-lg shadow-2xl p-8 w-full max-w-md border-4 border-gray-700"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center justify-center mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-16 h-16 text-blue-400"&gt;&lt;Tv /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h1 className="text-3xl font-bold text-center mb-2 text-blue-300 font-mono"&gt;CHANGE THE CHANNEL&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-center text-gray-400 mb-6 text-sm"&gt;Streaming Network&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">              </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="space-y-6 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="bg-gray-900 p-4 rounded-lg border-2 border-blue-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;h3 className="text-blue-300 font-mono text-sm mb-3 text-center"&gt;ROLL YOUR CREDENTIALS&lt;/h3&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                  </span></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="space-y-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>onClick={rollUsername}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>disabled={isRollingUser}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-mono text-sm rounded transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>🎲 ROLL USER</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="flex-1 px-3 py-2 bg-black border border-blue-500 rounded text-green-400 font-mono text-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>{rolledUsername || 'user??'}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>onClick={rollPassword}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>disabled={isRollingPass}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-mono text-sm rounded transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>🎲 ROLL PASS</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="flex-1 px-3 py-2 bg-black border border-blue-500 rounded text-green-400 font-mono text-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>{rolledPassword || '????'}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-blue-300 mb-2 font-mono text-sm"&gt;USERNAME&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>type="text"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={username}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onChange={(e) =&gt; setUsername(e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onKeyPress={(e) =&gt; e.key === 'Enter' &amp;&amp; handleLogin()}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className="w-full px-4 py-2 bg-gray-900 border-2 border-blue-500 rounded text-blue-300 focus:outline-none focus:border-blue-400 font-mono"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>placeholder="Enter rolled username"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-blue-300 mb-2 font-mono text-sm"&gt;PASSWORD&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>type="password"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={password}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onChange={(e) =&gt; setPassword(e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onKeyPress={(e) =&gt; e.key === 'Enter' &amp;&amp; handleLogin()}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className="w-full px-4 py-2 bg-gray-900 border-2 border-blue-500 rounded text-blue-300 focus:outline-none focus:border-blue-400 font-mono"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>placeholder="Enter rolled password"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={handleLogin}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-mono transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>SIGN IN</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (showArcade &amp;&amp; arcadeView === 'playing') {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="fixed inset-0 bg-black z-50 flex flex-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-gray-900 border-b-2 border-purple-600 p-4 flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-6 h-6 text-purple-400"&gt;&lt;Gamepad2 /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span className="text-white font-mono font-bold"&gt;{runningGame.name}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span className="text-gray-500 font-mono text-sm"&gt;({runningGame.platform})&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                </span>onClick={closeArcadeGame}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="p-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-6 h-6"&gt;&lt;X /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex-1 flex items-center justify-center bg-black p-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;EmulatorContainer game={runningGame} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (showArcade &amp;&amp; arcadeView === 'library') {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4 overflow-y-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-gray-900 rounded-lg border-4 border-purple-600 p-8 max-w-6xl w-full my-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="flex justify-between items-center mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 className="text-3xl font-bold text-white font-mono flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="w-8 h-8 text-purple-400"&gt;&lt;Gamepad2 /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>ARCADE LIBRARY</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; setShowArcade(false)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-mono transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>CLOSE</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{Object.entries(PLATFORMS).map(([key, platform]) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>key={key}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onClick={() =&gt; setSelectedArcadePlatform(key)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className={`p-4 rounded-lg border-2 transition-all font-mono ${</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>selectedArcadePlatform === key</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>? 'border-purple-500 bg-purple-900 text-white shadow-lg shadow-purple-500/50'</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>: 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600'</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}`}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p className="font-bold text-lg"&gt;{platform.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p className="text-xs opacity-70"&gt;{platform.ext.join(', ')}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>{selectedArcadePlatform &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="bg-gray-800 rounded-lg border-2 border-gray-700 p-6 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="flex items-center justify-between mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2 className="text-2xl font-bold text-white font-mono"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{PLATFORMS[selectedArcadePlatform].name} - Upload Games</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-mono cursor-pointer flex items-center gap-2 transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="w-5 h-5"&gt;&lt;Upload /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>UPLOAD</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>ref={fileInputRef}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>type="file"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>multiple</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>onChange={(e) =&gt; handleFileUploadArcade(e, selectedArcadePlatform)}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>className="hidden"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>accept={PLATFORMS[selectedArcadePlatform].ext.join(',')}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{uploadProgress &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="mb-4 bg-gray-700 rounded-full h-2 overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>className="bg-purple-500 h-full transition-all duration-300"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>style={{ width: `${uploadProgress}%` }}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="space-y-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{arcadeGames[selectedArcadePlatform] &amp;&amp; arcadeGames[selectedArcadePlatform].length &gt; 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>arcadeGames[selectedArcadePlatform].map(game =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>key={game.id}</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="bg-gray-700 rounded p-4 flex items-center justify-between hover:bg-gray-600 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="flex-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p className="text-white font-mono font-bold"&gt;{game.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p className="text-gray-300 text-sm font-mono"&gt;Ready to play&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="flex gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>onClick={() =&gt; launchArcadeGame(game)}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-mono flex items-center gap-2 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;div className="w-4 h-4"&gt;&lt;Play /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>PLAY</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>onClick={() =&gt; deleteArcadeGame(game.id)}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-mono transition-colors flex items-center gap-1"</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;div className="w-4 h-4"&gt;&lt;Trash2 /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>))</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="text-center py-8 text-gray-400 font-mono"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;No games uploaded for {PLATFORMS[selectedArcadePlatform].name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="text-sm mt-2"&gt;Upload {PLATFORMS[selectedArcadePlatform].ext.join(' or ')} files above&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>{Object.keys(arcadeGames).length &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;h2 className="text-2xl font-bold text-white font-mono mb-4"&gt;ALL GAMES&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{Object.entries(arcadeGames).map(([platform, gameList]) =&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>gameList.map(game =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div key={game.id} className="bg-gray-800 rounded-lg border-2 border-gray-700 p-4 hover:border-purple-500 transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="flex items-start justify-between mb-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div className="flex-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;p className="text-purple-400 font-mono text-xs font-bold"&gt;{game.platform}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;p className="text-white font-mono text-sm font-bold truncate"&gt;{game.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>onClick={() =&gt; launchArcadeGame(game)}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>className="w-full px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-mono text-sm flex items-center justify-center gap-2 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div className="w-4 h-4"&gt;&lt;Play /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>PLAY</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>))</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="min-h-screen bg-black p-8 flex flex-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="max-w-7xl mx-auto w-full flex-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-between items-center mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h1 className="text-4xl font-bold text-white font-mono flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="w-10 h-10"&gt;&lt;Tv /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>CHANGE THE CHANNEL</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;PixelClock /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; setShowArcade(!showArcade)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-mono transition-colors flex items-center gap-2"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="w-5 h-5"&gt;&lt;Gamepad2 /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>ARCADE</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; setIsLoggedIn(false)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-mono transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>LOGOUT</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="grid grid-cols-1 lg:grid-cols-3 gap-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="lg:col-span-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="bg-black p-4 rounded-lg shadow-2xl border-4 border-gray-800"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="bg-black rounded-lg overflow-hidden relative" style={{ paddingBottom: '56.25%' }} ref={containerRef}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{tvOn ? (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>{channels.map((channel) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>const videoUrl = channel.videos[channelStates[channel.id].videoIndex];</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>const isVisible = channel.id === currentChannel;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;video</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>key={`${channel.id}-${channelStates[channel.id].key}`}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>ref={(el) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>if (el) channelVideoRefs.current[channel.id] = el;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>}}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>className={`absolute top-0 left-0 w-full h-full object-cover ${isVisible ? 'z-10' : 'z-0 opacity-0 pointer-events-none'}`}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>playsInline</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>preload="auto"</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>src={videoUrl}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>muted={!isVisible}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>onEnded={() =&gt; handleVideoEnd(channel.id)}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>onCanPlay={(e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>if (tvOn) {</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>e.target.play().catch(err =&gt; console.log('Play prevented:', err));</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>}}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>})}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-950"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{showChannelInfo &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="absolute bottom-16 left-4 bg-black bg-opacity-70 px-4 py-2 rounded pointer-events-none z-10"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="text-green-400 font-mono text-sm"&gt;CH {currentChannel}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="text-green-400 font-mono text-xs"&gt;{currentChannelData.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                  </span></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="mt-6 flex justify-center gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>onClick={togglePower}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>className={`p-4 rounded-full transition-all ${</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>tvOn<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/50'<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>: 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-500/50'</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>}`}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="w-6 h-6 text-white"&gt;&lt;Power /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{tvOn &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>onClick={toggleFullscreen}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>className="p-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/50"</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div className="w-6 h-6 text-white"&gt;&lt;Maximize /&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 className="text-2xl font-bold text-white font-mono mb-4"&gt;CHANNELS&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{channels.map((channel) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>key={channel.id}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onClick={() =&gt; handleChannelChange(channel.id)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className={`w-full p-4 rounded-lg font-mono transition-all ${</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>currentChannel === channel.id</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>? 'bg-white text-black shadow-lg shadow-white/50'</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>: 'bg-gray-800 text-white hover:bg-gray-700 hover:shadow-lg hover:shadow-white/30'</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}`}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center justify-between"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="text-left"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="font-bold text-lg"&gt;{channel.name}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p className="text-sm opacity-80"&gt;{channel.description}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="text-3xl font-bold"&gt;{channel.id}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="mt-16 border-t border-gray-700 pt-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h2 className="text-3xl font-bold text-white font-mono mb-6"&gt;UPCOMING SCHEDULE&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{channels.map((channel) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div key={channel.id} className="bg-gray-900 rounded-lg border-2 border-gray-700 p-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 className="text-lg font-bold text-white font-mono mb-4 pb-2 border-b border-gray-600"&gt;CH {channel.id} - {channel.name}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="space-y-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{channel.schedule.map((item, idx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>key={idx}</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="block p-3 bg-gray-800 rounded"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="flex items-center justify-between mb-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p className="text-green-400 font-mono text-sm"&gt;{formatScheduleTime(item.hour, item.minute)}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;p className="text-white text-sm font-mono truncate"&gt;{item.title}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    const PixelClock = () => {
+      const [time, setTime] = useState(new Date());
+
+      useEffect(() => {
+        const timer = setInterval(() => {
+          setTime(new Date());
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      const formatTime = () => {
+        return time.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true 
+        });
+      };
+
+      return (
+        <div className="flex items-center gap-2 bg-gray-900 px-4 py-2 rounded border-2 border-green-500">
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+          <span className="text-green-400 font-mono text-lg font-bold tracking-wider">
+            {formatTime()}
+          </span>
+        </div>
+      );
+    };
+
+    const Play = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    );
+
+    const Pause = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="4" height="16" x="6" y="4"/>
+        <rect width="4" height="16" x="14" y="4"/>
+      </svg>
+    );
+
+    const Tv = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/>
+        <polyline points="17 2 12 7 7 2"/>
+      </svg>
+    );
+
+    const Power = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v10"/>
+        <path d="M18.4 6.6a9 9 0 1 1-12.77.04"/>
+      </svg>
+    );
+
+    const Maximize = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+        <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+        <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+        <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+      </svg>
+    );
+
+    const Gamepad2 = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="6" x2="10" y1="12" y2="12"/>
+        <line x1="8" x2="8" y1="10" y2="14"/>
+        <line x1="15" x2="15.01" y1="13" y2="13"/>
+        <line x1="18" x2="18.01" y1="11" y2="11"/>
+        <rect width="20" height="12" x="2" y="6" rx="2"/>
+      </svg>
+    );
+
+    const Upload = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" x2="12" y1="3" y2="15"/>
+      </svg>
+    );
+
+    const X = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" x2="6" y1="6" y2="18"/>
+        <line x1="6" x2="18" y1="6" y2="18"/>
+      </svg>
+    );
+
+    const Trash2 = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <line x1="10" x2="10" y1="11" y2="17"/>
+        <line x1="14" x2="14" y1="11" y2="17"/>
+      </svg>
+    );
+
+    const PLATFORMS = {
+      DOS: { name: 'DOS', ext: ['.exe', '.com', '.bat'], description: 'DOS/Windows 95 Games', core: 'dos' },
+      NES: { name: 'NES', ext: ['.nes', '.zip'], description: 'Nintendo Entertainment System', core: 'nes' },
+      SNES: { name: 'SNES', ext: ['.smc', '.sfc', '.zip'], description: 'Super Nintendo', core: 'snes' },
+      GEN: { name: 'Genesis', ext: ['.md', '.gen', '.zip'], description: 'Sega Genesis', core: 'segaMD' },
+      GB: { name: 'Game Boy', ext: ['.gb', '.gbc', '.zip'], description: 'Game Boy/Color', core: 'gb' },
+      PSX: { name: 'PlayStation', ext: ['.iso', '.cue', '.bin'], description: 'PlayStation 1', core: 'psx' },
+      N64: { name: 'N64', ext: ['.z64', '.n64', '.zip'], description: 'Nintendo 64', core: 'n64' },
+      GBA: { name: 'GBA', ext: ['.gba', '.zip'], description: 'Game Boy Advance', core: 'gba' }
+    };
+
+    const EmulatorContainer = ({ game }) => {
+      const [error, setError] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const emulatorInstanceRef = useRef(null);
+      const containerIdRef = useRef(`emulator-${Date.now()}`);
+
+      useEffect(() => {
+        if (!game) return;
+
+        const platformMap = {
+          'DOS': 'dos',
+          'NES': 'nes',
+          'SNES': 'snes',
+          'Genesis': 'segaMD',
+          'Game Boy': 'gb',
+          'GBA': 'gba',
+          'N64': 'n64',
+          'PlayStation': 'psx'
+        };
+
+        const core = platformMap[game.platform];
+        if (!core) {
+          setError('Unsupported platform: ' + game.platform);
+          setLoading(false);
+          return;
+        }
+
+        let blobUrl = null;
+
+        const initEmulator = async () => {
+          try {
+            // Create blob from ArrayBuffer
+            const blob = new Blob([game.data], { type: 'application/octet-stream' });
+            blobUrl = URL.createObjectURL(blob);
+
+            console.log('Initializing emulator:', {
+              platform: game.platform,
+              core: core,
+              name: game.name,
+              dataSize: game.data.byteLength
+            });
+
+            // Clear any existing emulator instance
+            const container = document.getElementById(containerIdRef.current);
+            if (container) {
+              container.innerHTML = '';
+            }
+
+            // Configure EmulatorJS
+            window.EJS_player = `#${containerIdRef.current}`;
+            window.EJS_core = core;
+            window.EJS_gameName = game.name;
+            window.EJS_gameUrl = blobUrl;
+            window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';
+            window.EJS_biosUrl = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/bios/';
+            window.EJS_color = '#6B21A8';
+            window.EJS_startOnLoaded = true;
+            window.EJS_RESET_VARS = true;
+
+            // Remove old script if exists
+            const oldScript = document.querySelector('script[src*="EmulatorJS"]');
+            if (oldScript) {
+              oldScript.remove();
+            }
+
+            // Load EmulatorJS
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js';
+            
+            script.onload = () => {
+              console.log('EmulatorJS loaded successfully');
+              setLoading(false);
+            };
+
+            script.onerror = () => {
+              setError('Failed to load emulator script');
+              setLoading(false);
+            };
+
+            document.body.appendChild(script);
+            emulatorInstanceRef.current = script;
+
+          } catch (err) {
+            console.error('Emulator initialization error:', err);
+            setError('Failed to initialize: ' + err.message);
+            setLoading(false);
+          }
+        };
+
+        initEmulator();
+
+        return () => {
+          // Cleanup
+          if (blobUrl) {
+            URL.revokeObjectURL(blobUrl);
+          }
+          
+          if (emulatorInstanceRef.current && emulatorInstanceRef.current.parentNode) {
+            emulatorInstanceRef.current.remove();
+          }
+
+          const container = document.getElementById(containerIdRef.current);
+          if (container) {
+            container.innerHTML = '';
+          }
+
+          // Clean up globals
+          delete window.EJS_player;
+          delete window.EJS_core;
+          delete window.EJS_gameName;
+          delete window.EJS_gameUrl;
+          delete window.EJS_pathtodata;
+          delete window.EJS_biosUrl;
+        };
+      }, [game]);
+
+      if (error) {
+        return (
+          <div className="w-full h-full bg-gray-950 rounded-lg border-4 border-red-600 flex items-center justify-center">
+            <div className="text-center text-red-400 font-mono p-8">
+              <p className="text-2xl mb-4">⚠️</p>
+              <p className="mb-2 text-lg">Error Loading Game</p>
+              <p className="text-sm mb-4">{error}</p>
+              <p className="text-xs text-gray-500">Platform: {game.platform}</p>
+              <p className="text-xs text-gray-500 mt-2">File: {game.name}</p>
+              <p className="text-xs text-gray-600 mt-4">Try a different ROM file</p>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="w-full h-full bg-black rounded-lg border-4 border-purple-600 overflow-hidden relative" style={{ minHeight: '600px' }}>
+          <div id={containerIdRef.current} className="w-full h-full" style={{ minHeight: '600px' }}></div>
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90">
+              <div className="text-center text-purple-400 font-mono">
+                <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-xl mb-2">Loading Emulator...</p>
+                <p className="text-sm text-gray-400 mt-2">{game.name}</p>
+                <p className="text-xs text-gray-500 mt-1">Platform: {game.platform}</p>
+                <p className="text-xs text-gray-600 mt-4">This may take a moment...</p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    function App() {
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
+      const [username, setUsername] = useState('');
+      const [password, setPassword] = useState('');
+      const [currentChannel, setCurrentChannel] = useState(1);
+      const [tvOn, setTvOn] = useState(false);
+      const [showChannelInfo, setShowChannelInfo] = useState(false);
+      const [rolledUsername, setRolledUsername] = useState('');
+      const [rolledPassword, setRolledPassword] = useState('');
+      const [isRollingUser, setIsRollingUser] = useState(false);
+      const [isRollingPass, setIsRollingPass] = useState(false);
+      const [showArcade, setShowArcade] = useState(false);
+      const [arcadeView, setArcadeView] = useState('library');
+      const [selectedArcadePlatform, setSelectedArcadePlatform] = useState(null);
+      const [arcadeGames, setArcadeGames] = useState({});
+      const [uploadProgress, setUploadProgress] = useState(0);
+      const [runningGame, setRunningGame] = useState(null);
+      const containerRef = useRef(null);
+      const channelVideoRefs = useRef({});
+      const fileInputRef = useRef(null);
+      const [channelStates, setChannelStates] = useState({
+        1: { videoIndex: 0, key: 0 },
+        2: { videoIndex: 0, key: 0 },
+        3: { videoIndex: 0, key: 0 },
+        4: { videoIndex: 0, key: 0 },
+      }); 
+
+      const channels = [
+        {
+          id: 1,
+          name: 'NICKELODEON',
+          videos: [
+            'https://www.dropbox.com/scl/fi/0qhbxc2b1owo9sxcxa0jd/nick-halloween-block.mp4?rlkey=xly50ft4owo9zv45atkvonbzu&st=7fzpqayr&raw=1',
+            'https://www.dropbox.com/scl/fi/0kx6kuhz626w2ff5otupp/716-1.mp4?rlkey=yna7t1kngnjopq9rwo0mej2dt&st=sju64tr4&raw=1',
+            'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&st=p9ywopri&raw=1',
+            'https://www.dropbox.com/scl/fi/jwhoxq74sdlgn6e3flsyg/Spongebob-Graveyard-Shift-Airing.mp4?rlkey=inxptpawamqbt1jwwoh9anol3&st=5u7fkp8q&raw=1',
+            'https://www.dropbox.com/scl/fi/dsi4esqdoz14952m4hzq4/Jimmy-Neutron-Marathon-June-21-2007-Disc-1.mp4?rlkey=zw3e6wshthzbvihrksm099nl0&st=oxem21rb&raw=1',
+            'https://www.dropbox.com/scl/fi/ikjg2dgcnou5voskzlali/7h9-F-ir1y-066p-r9n15-Ch-nn91-Ch-59r5-1.mp4?rlkey=ffmvjedudj9lu2kz5h3ihw6l4&st=rehd0ni2&raw=1',
+            'https://www.dropbox.com/scl/fi/d0k90sw5vrzstwy10az71/716-2.mp4?rlkey=z4487ctdhorhj47514cnh5xq1&st=nqxoo09x&raw=1'
+          ],
+          schedule: [
+            { title: 'Nick Halloween', hour: 12, minute: 0, videoIndex: 0 },
+            { title: 'SpongeBash Special', hour: 2, minute: 45, videoIndex: 1 },
+            { title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 },
+            { title: 'Graveyard Shift', hour: 5, minute: 10, videoIndex: 3 },
+            { title: 'Jimmy Neutron Marathon', hour: 5, minute: 35, videoIndex: 4 },
+            { title: 'Fairly Odd Parents Marathon', hour: 7, minute: 35, videoIndex: 5 },
+            { title: 'SpongeBash Special 2 ', hour: 9, minute: 50, videoIndex: 6 }
+          ]
+        },
+        {
+          id: 2,
+          name: 'CARTOON NETWORK',
+          videos: [
+            'https://www.dropbox.com/scl/fi/v88t8aoxt17uh1pqo42ch/live_user_livetoons10_1357606766.flv.mp4?rlkey=6w7m1ee8qfwstww3m8g25hmin&st=plw085je&raw=1',
+            'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&st=oaxb01u2&raw=1', 
+            'https://www.dropbox.com/scl/fi/v5fizu9tb9yqbt3aj3ryk/live_user_livetoons10_1358816393.mp4?rlkey=55prgq8uk3ifvfw9vxgdvh3d3&st=oyva12v1&raw=1',
+            'https://www.dropbox.com/scl/fi/bn20pbb91s26lzbdmwvkh/live_user_livetoons10_1358899176.mp4?rlkey=92kekb0yvufcyh7j2clbrro8t&st=hfqsjpaq&raw=1',
+            'https://www.dropbox.com/scl/fi/fsrn8w8bxchbwecrogy16/live_user_livetoons10_1359421185.flv.mp4?rlkey=pek6z0ep4as5qkhvmoccf346t&st=x4hvp8c0&raw=1',
+            'https://www.dropbox.com/scl/fi/02rg3k5paas5fiexosn0m/VTS_01_1.mp4?rlkey=2id1qj9codi3ql3rdztvyvbly&st=1liizih6&raw=1',
+            'https://www.dropbox.com/scl/fi/qovomj0q2v7rmu5gxboka/VTS_02_1.mp4?rlkey=9qbxn4wcnm8q2e3l2f3bjz66r&st=bwh2598s&raw=1',
+            'https://www.dropbox.com/scl/fi/21yepjjlti1jfz5grh8e2/VTS_02_2.mp4?rlkey=tstp73n8kyg8lb8ms2azjoadi&st=j21ztx3n&raw=1',
+            'https://www.dropbox.com/scl/fi/ypz45myxzj356cd5mcjro/Tape-25-CARTOON-NETWORK-BOOMERANG-VOL.-2-2012-2013-2015-PART-1.mp4?rlkey=bdwdjccljg2ie4te0472o9ulw&st=wflfyq3v&raw=1'
+          ],
+          schedule: [
+            { title: 'Regular Show', hour: 12, minute: 0, videoIndex: 0 },
+            { title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 },
+            { title: 'Regular Show', hour: 1, minute: 0, videoIndex: 2 },
+            { title: 'The Amazing World Of Gumball', hour: 1, minute: 30, videoIndex: 3 },
+            { title: 'Regular Show', hour: 2, minute: 0, videoIndex: 4 },
+            { title: 'Chowder', hour: 2, minute: 30, videoIndex: 5 },
+            { title: 'Chowder/Flapjack', hour: 3, minute: 0, videoIndex: 6 },
+            { title: 'Flapjack', hour: 3, minute: 20, videoIndex: 7 },
+            { title: 'Fosters Home for Imaginary Friends', hour: 3, minute: 40, videoIndex: 8 },
+          ]
+        },
+        {
+          id: 3,
+          name: 'ADULT SWIM',
+          videos: [
+            'https://www.dropbox.com/scl/fi/r3f7o7ij3p92wskw2txf2/z303-as026-_Adult_Swim_07.03.05-1.mp4?rlkey=ho4zmqo62b6pjfxcrbyemf477&st=527poo3c&raw=1',
+            'https://www.dropbox.com/scl/fi/fhffgqtmtsl6wspuhwz75/VTS_01_3.mp4?rlkey=rm7c9qv28gawzrowp0nf87f8y&st=4mi06aoj&raw=1',
+            'https://www.dropbox.com/scl/fi/ygggf6j7ca30z3j6g37a9/Family-Guy-Myspleen-003.mp4?rlkey=jjnzgc6fawyvu5ay11uhqljc7&st=i1dcvxal&raw=1',
+            'https://www.dropbox.com/scl/fi/odjks7bqt4g1evpp35pi3/Family-Guy-Myspleen-007.mp4?rlkey=piqclzcgr4jzxnod6mh8m05ck&st=m67vvjd7&raw=1',
+            'https://www.dropbox.com/scl/fi/qaac0rhj03k0rex4cf6oe/Family-Guy-Myspleen-74.mp4?rlkey=0vdk9u02pgqu7lqumdxg8a2fz&st=5sn28zoe&raw=1'
+          ],
+          schedule: [
+            { title: 'Family Guy', hour: 22, minute: 0, videoIndex: 0 },
+            { title: 'American Dad', hour: 22, minute: 30, videoIndex: 1 },
+            { title: 'Futurama/Aqua Teen Hunger Force', hour: 23, minute: 30, videoIndex: 2 },
+            { title: 'Family Guy', hour: 24, minute: 0, videoIndex: 3 },
+            { title: 'Family Guy', hour: 24, minute: 30, videoIndex: 4 },
+            { title: 'Family Guy', hour: 25, minute: 0, videoIndex: 5 }
+          ]
+        },
+        {
+          id: 4,
+          name: 'DISNEY',
+          videos: [
+            'https://www.dropbox.com/scl/fi/ojk72t6fu6xqsh6ifka6q/The-Suite-Life-of-Zack-amp-Cody-Big-Hair-and-Baseball-2009-11-16-0.mp4?rlkey=rfl2qldsr6tvct4i63ejjn1ol&st=jjhwel09&raw=1',
+            'https://www.dropbox.com/scl/fi/g327hug98rglpr0up48dx/Kick.Buttowski.Suburban.Daredevil.S01E39E40.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=0tzfsp95ifnf61zl5jqtcebsx&st=ww6q42lf&raw=1',
+            'https://www.dropbox.com/scl/fi/40tp46lyqrw1d3oqx0o68/Kick.Buttowski.Suburban.Daredevil.S01E35E36.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=4ixrvdv5tzcan0s86nnqhn9ym&st=w0wa9y7v&raw=1',
+            'https://www.dropbox.com/scl/fi/u89sv95hzxwv61jwovv7a/Kick.Buttowski.Suburban.Daredevil.S01E21E22.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.mp4?rlkey=2snodpvkhaar86nhfuluw0tc3&st=cliv6uro&raw=1',
+            'https://www.dropbox.com/scl/fi/cmn3685iwl94qvrusl2wh/Good-Luck-Charlie-2010-S02E05.mp4?rlkey=3l9wogldnw0675004atsf5r1j&st=c5bd1x6f&raw=1',
+            'https://www.dropbox.com/scl/fi/bsnxykphfw9ct5u9d96wj/Good-Luck-Charlie-2010-S02E02.mp4?rlkey=y6k78wel1izytirw2q7vgnj1l&st=fwjhv1oi&raw=1',
+            'https://www.dropbox.com/scl/fi/kqrwtgsdmzogyphnx4swn/videoplayback-3.mp4?rlkey=99aqvdg830spb90g2e4vtt8m3&st=ocfr38ol&raw=1',
+            'https://www.dropbox.com/scl/fi/iklezqsorssrijrlo6wh6/Good-Luck-Charlie-2010-S02E01.mp4?rlkey=dam28lh70i0zprb37f5565osx&st=o35exo8h&raw=1',
+            'https://www.dropbox.com/scl/fi/1ciywqxo7wfqmzx1bsck3/S1E13-Boss-Mabel.ia.mp4?rlkey=eseuishqjjy66aioo55clpb07&st=n8m1fr0s&raw=1',
+            'https://www.dropbox.com/scl/fi/vyr4pdh5pi8e7b28k3vqi/S1E12-Summerween.ia.mp4?rlkey=rgoh7q0oybimdgkeezp08yfus&st=cf1lvmcn&raw=1',
+            'https://www.dropbox.com/scl/fi/hse4mqdv02vl81ra1bts0/Phineas-and-Ferb-S02E21-E22-Lets-Take-a-Quiz-At-the-Car-Wash-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=au6mvrf2itnchejqq1sog1sc2&st=b7q83kcb&raw=1',
+            'https://www.dropbox.com/scl/fi/4q9jskzualah6fgvbjzhz/Phineas-and-Ferb-S02E30-E31-Not-Phineas-and-Ferb-Phineas-and-Ferb-Busters-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=52cnp23o1t1yvtaz2m76akvtg&st=16x7bq0i&raw=1'
+          ],
+          schedule: [
+            { title: 'Suite Life of Zack & Cody', hour: 8, minute: 0, videoIndex: 0 },
+            { title: 'Kick Buttowski', hour: 8, minute: 30, videoIndex: 2 },
+            { title: 'Kick Buttowski', hour: 9, minute: 0, videoIndex: 3 },
+            { title: 'Kick Buttowski', hour: 9, minute: 30, videoIndex: 4 },
+            { title: 'Good Luck Charlie', hour: 10, minute: 0, videoIndex: 5 },
+            { title: 'Good Luck Charlie', hour: 10, minute: 30, videoIndex: 6},
+            { title: 'Good Luck Charlie', hour: 11, minute: 0, videoIndex: 7},
+            { title: 'Gravity Falls', hour: 11, minute: 0, videoIndex: 8},
+            { title: 'Gravity Falls', hour: 11, minute: 30, videoIndex: 9},
+            { title: 'Phineas and Ferb', hour: 12, minute: 0, videoIndex: 10},
+            { title: 'Phineas and Ferb', hour: 12, minute: 30, videoIndex: 11}
+          ]
+        }
+      ];
+
+      const formatScheduleTime = (hour, minute) => {
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const displayHour = hour % 12 || 12;
+        const displayMinute = minute.toString().padStart(2, '0');
+        return `${displayHour}:${displayMinute} ${period}`;
+      };
+
+      const getCurrentShow = (channelId) => {
+        const channel = channels.find(ch => ch.id === channelId);
+        if (!channel) return null;
+        
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        
+        let currentShow = null;
+        for (let i = 0; i < channel.schedule.length; i++) {
+          const showMinutes = channel.schedule[i].hour * 60 + channel.schedule[i].minute;
+          const nextShowMinutes = i < channel.schedule.length - 1 
+            ? channel.schedule[i + 1].hour * 60 + channel.schedule[i + 1].minute
+            : 24 * 60;
+          
+          if (currentMinutes >= showMinutes && currentMinutes < nextShowMinutes) {
+            currentShow = channel.schedule[i];
+            break;
+          }
+        }
+        
+        return currentShow;
+      };
+
+      const handleScheduleClick = (channelId, videoIndex) => {
+        setCurrentChannel(channelId);
+        setChannelStates(prev => ({
+          ...prev,
+          [channelId]: {
+            videoIndex: videoIndex,
+            key: prev[channelId].key + 1
+          }
+        }));
+        setShowChannelInfo(true);
+        if (!tvOn) {
+          setTvOn(true);
+        }
+      };
+
+      const rollUsername = () => {
+        setIsRollingUser(true);
+        let count = 0;
+        const interval = setInterval(() => {
+          const randomNum = Math.floor(Math.random() * 99) + 1;
+          setRolledUsername(`user${randomNum}`);
+          count++;
+          if (count >= 20) {
+            clearInterval(interval);
+            setIsRollingUser(false);
+          }
+        }, 50);
+      };
+
+      const rollPassword = () => {
+        setIsRollingPass(true);
+        let count = 0;
+        const interval = setInterval(() => {
+          const randomPass = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+          setRolledPassword(randomPass);
+          count++;
+          if (count >= 20) {
+            clearInterval(interval);
+            setIsRollingPass(false);
+          }
+        }, 50);
+      };
+
+      const handleLogin = () => {
+        if (username === rolledUsername && password === rolledPassword) {
+          setIsLoggedIn(true);
+        } else {
+          alert('Invalid credentials. Please use the rolled username and password.');
+        }
+      };
+
+      const handleChannelChange = (channelId) => {
+        setCurrentChannel(channelId);
+        setShowChannelInfo(true);
+      };
+
+      const togglePower = () => {
+        setTvOn(!tvOn);
+      };
+
+      const toggleFullscreen = () => {
+        const element = containerRef.current;
+        if (element) {
+          if (element.requestFullscreen) {
+            element.requestFullscreen();
+          } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen();
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+          }
+        }
+      };
+
+      const currentChannelData = channels.find(ch => ch.id === currentChannel);
+
+      const handleVideoEnd = (channelId) => {
+        const channel = channels.find(ch => ch.id === channelId);
+        const nextIndex = (channelStates[channelId].videoIndex + 1) % channel.videos.length;
+        setChannelStates(prev => ({
+          ...prev,
+          [channelId]: {
+            videoIndex: nextIndex,
+            key: prev[channelId].key + 1
+          }
+        }));
+      };
+
+      const handleFileUploadArcade = (e, platformKey) => {
+        const files = Array.from(e.target.files);
+        const platform = PLATFORMS[platformKey];
+        
+        files.forEach(file => {
+          setUploadProgress(Math.random() * 50);
+          setTimeout(() => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const gameData = {
+                name: file.name,
+                platform: platform.name,
+                platformKey: platformKey,
+                data: event.target.result,
+                id: `${platformKey}-${Date.now()}-${Math.random()}`
+              };
+              setArcadeGames(prev => ({
+                ...prev,
+                [platformKey]: [...(prev[platformKey] || []), gameData]
+              }));
+            };
+            reader.readAsArrayBuffer(file);
+            setUploadProgress(100);
+            setTimeout(() => setUploadProgress(0), 1000);
+          }, 500);
+        });
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      };
+
+      const deleteArcadeGame = (gameId) => {
+        setArcadeGames(prev => {
+          const updated = { ...prev };
+          Object.keys(updated).forEach(platform => {
+            updated[platform] = updated[platform].filter(g => g.id !== gameId);
+            if (updated[platform].length === 0) delete updated[platform];
+          });
+          return updated;
+        });
+      };
+
+      const launchArcadeGame = (game) => {
+        setRunningGame(game);
+        setArcadeView('playing');
+      };
+
+      const closeArcadeGame = () => {
+        setRunningGame(null);
+        setArcadeView('library');
+      };
+
+      useEffect(() => {
+        if (tvOn) {
+          Object.keys(channelVideoRefs.current).forEach(channelId => {
+            const video = channelVideoRefs.current[channelId];
+            if (video) {
+              video.play().catch(err => {
+                console.log('Play was prevented:', err);
+              });
+            }
+          });
+        } else {
+          Object.keys(channelVideoRefs.current).forEach(channelId => {
+            const video = channelVideoRefs.current[channelId];
+            if (video) {
+              video.pause();
+            }
+          });
+        }
+      }, [tvOn]);
+
+      useEffect(() => {
+        if (showChannelInfo) {
+          const timer = setTimeout(() => {
+            setShowChannelInfo(false);
+          }, 5000);
+          return () => clearTimeout(timer);
+        }
+      }, [showChannelInfo]);
+
+      if (!isLoggedIn) {
+        return (
+          <div className="min-h-screen bg-black flex items-center justify-center p-4">
+            <div className="bg-gray-800 rounded-lg shadow-2xl p-8 w-full max-w-md border-4 border-gray-700">
+              <div className="flex items-center justify-center mb-6">
+                <div className="w-16 h-16 text-blue-400"><Tv /></div>
+              </div>
+              <h1 className="text-3xl font-bold text-center mb-2 text-blue-300 font-mono">CHANGE THE CHANNEL</h1>
+              <p className="text-center text-gray-400 mb-6 text-sm">Streaming Network</p>
+              
+              <div className="space-y-6 mb-6">
+                <div className="bg-gray-900 p-4 rounded-lg border-2 border-blue-500">
+                  <h3 className="text-blue-300 font-mono text-sm mb-3 text-center">ROLL YOUR CREDENTIALS</h3>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={rollUsername}
+                        disabled={isRollingUser}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-mono text-sm rounded transition-colors"
+                      >
+                        🎲 ROLL USER
+                      </button>
+                      <div className="flex-1 px-3 py-2 bg-black border border-blue-500 rounded text-green-400 font-mono text-sm">
+                        {rolledUsername || 'user??'}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={rollPassword}
+                        disabled={isRollingPass}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-mono text-sm rounded transition-colors"
+                      >
+                        🎲 ROLL PASS
+                      </button>
+                      <div className="flex-1 px-3 py-2 bg-black border border-blue-500 rounded text-green-400 font-mono text-sm">
+                        {rolledPassword || '????'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-blue-300 mb-2 font-mono text-sm">USERNAME</label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                    className="w-full px-4 py-2 bg-gray-900 border-2 border-blue-500 rounded text-blue-300 focus:outline-none focus:border-blue-400 font-mono"
+                    placeholder="Enter rolled username"
+                  />
+                </div>
+                <div>
+                  <label className="block text-blue-300 mb-2 font-mono text-sm">PASSWORD</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                    className="w-full px-4 py-2 bg-gray-900 border-2 border-blue-500 rounded text-blue-300 focus:outline-none focus:border-blue-400 font-mono"
+                    placeholder="Enter rolled password"
+                  />
+                </div>
+                <button
+                  onClick={handleLogin}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-mono transition-colors"
+                >
+                  SIGN IN
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (showArcade && arcadeView === 'playing') {
+        return (
+          <div className="fixed inset-0 bg-black z-50 flex flex-col">
+            <div className="bg-gray-900 border-b-2 border-purple-600 p-4 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 text-purple-400"><Gamepad2 /></div>
+                <span className="text-white font-mono font-bold">{runningGame.name}</span>
+                <span className="text-gray-500 font-mono text-sm">({runningGame.platform})</span>
+              </div>
+              <button
+                onClick={closeArcadeGame}
+                className="p-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+              >
+                <div className="w-6 h-6"><X /></div>
+              </button>
+            </div>
+            <div className="flex-1 flex items-center justify-center bg-black p-4">
+              <EmulatorContainer game={runningGame} />
+            </div>
+          </div>
+        );
+      }
+
+      if (showArcade && arcadeView === 'library') {
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-gray-900 rounded-lg border-4 border-purple-600 p-8 max-w-6xl w-full my-8">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-3xl font-bold text-white font-mono flex items-center gap-3">
+                  <div className="w-8 h-8 text-purple-400"><Gamepad2 /></div>
+                  ARCADE LIBRARY
+                </h2>
+                <button
+                  onClick={() => setShowArcade(false)}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-mono transition-colors"
+                >
+                  CLOSE
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
+                {Object.entries(PLATFORMS).map(([key, platform]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedArcadePlatform(key)}
+                    className={`p-4 rounded-lg border-2 transition-all font-mono ${
+                      selectedArcadePlatform === key
+                        ? 'border-purple-500 bg-purple-900 text-white shadow-lg shadow-purple-500/50'
+                        : 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600'
+                    }`}
+                  >
+                    <p className="font-bold text-lg">{platform.name}</p>
+                    <p className="text-xs opacity-70">{platform.ext.join(', ')}</p>
+                  </button>
+                ))}
+              </div>
+
+              {selectedArcadePlatform && (
+                <div className="bg-gray-800 rounded-lg border-2 border-gray-700 p-6 mb-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-white font-mono">
+                      {PLATFORMS[selectedArcadePlatform].name} - Upload Games
+                    </h2>
+                    <label className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-mono cursor-pointer flex items-center gap-2 transition-colors">
+                      <div className="w-5 h-5"><Upload /></div>
+                      UPLOAD
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        onChange={(e) => handleFileUploadArcade(e, selectedArcadePlatform)}
+                        className="hidden"
+                        accept={PLATFORMS[selectedArcadePlatform].ext.join(',')}
+                      />
+                    </label>
+                  </div>
+
+                  {uploadProgress > 0 && (
+                    <div className="mb-4 bg-gray-700 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-purple-500 h-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    {arcadeGames[selectedArcadePlatform] && arcadeGames[selectedArcadePlatform].length > 0 ? (
+                      arcadeGames[selectedArcadePlatform].map(game => (
+                        <div
+                          key={game.id}
+                          className="bg-gray-700 rounded p-4 flex items-center justify-between hover:bg-gray-600 transition-colors"
+                        >
+                          <div className="flex-1">
+                            <p className="text-white font-mono font-bold">{game.name}</p>
+                            <p className="text-gray-300 text-sm font-mono">Ready to play</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => launchArcadeGame(game)}
+                              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-mono flex items-center gap-2 transition-colors"
+                            >
+                              <div className="w-4 h-4"><Play /></div>
+                              PLAY
+                            </button>
+                            <button
+                              onClick={() => deleteArcadeGame(game.id)}
+                              className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-mono transition-colors flex items-center gap-1"
+                            >
+                              <div className="w-4 h-4"><Trash2 /></div>
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8 text-gray-400 font-mono">
+                        <p>No games uploaded for {PLATFORMS[selectedArcadePlatform].name}</p>
+                        <p className="text-sm mt-2">Upload {PLATFORMS[selectedArcadePlatform].ext.join(' or ')} files above</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {Object.keys(arcadeGames).length > 0 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white font-mono mb-4">ALL GAMES</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {Object.entries(arcadeGames).map(([platform, gameList]) =>
+                      gameList.map(game => (
+                        <div key={game.id} className="bg-gray-800 rounded-lg border-2 border-gray-700 p-4 hover:border-purple-500 transition-colors">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <p className="text-purple-400 font-mono text-xs font-bold">{game.platform}</p>
+                              <p className="text-white font-mono text-sm font-bold truncate">{game.name}</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => launchArcadeGame(game)}
+                            className="w-full px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-mono text-sm flex items-center justify-center gap-2 transition-colors"
+                          >
+                            <div className="w-4 h-4"><Play /></div>
+                            PLAY
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-black p-8 flex flex-col">
+          <div className="max-w-7xl mx-auto w-full flex-1">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-4xl font-bold text-white font-mono flex items-center gap-3">
+                <div className="w-10 h-10"><Tv /></div>
+                CHANGE THE CHANNEL
+              </h1>
+              <div className="flex items-center gap-4">
+                <PixelClock />
+                <button
+                  onClick={() => setShowArcade(!showArcade)}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-mono transition-colors flex items-center gap-2"
+                >
+                  <div className="w-5 h-5"><Gamepad2 /></div>
+                  ARCADE
+                </button>
+                <button
+                  onClick={() => setIsLoggedIn(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-mono transition-colors"
+                >
+                  LOGOUT
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <div className="bg-black p-4 rounded-lg shadow-2xl border-4 border-gray-800">
+                  <div className="bg-black rounded-lg overflow-hidden relative" style={{ paddingBottom: '56.25%' }} ref={containerRef}>
+                    {tvOn ? (
+                      <>
+                        {channels.map((channel) => {
+                          const videoUrl = channel.videos[channelStates[channel.id].videoIndex];
+                          const isVisible = channel.id === currentChannel;
+                          return (
+                            <video
+                              key={`${channel.id}-${channelStates[channel.id].key}`}
+                              ref={(el) => {
+                                if (el) channelVideoRefs.current[channel.id] = el;
+                              }}
+                              className={`absolute top-0 left-0 w-full h-full object-cover ${isVisible ? 'z-10' : 'z-0 opacity-0 pointer-events-none'}`}
+                              playsInline
+                              preload="auto"
+                              src={videoUrl}
+                              muted={!isVisible}
+                              onEnded={() => handleVideoEnd(channel.id)}
+                              onCanPlay={(e) => {
+                                if (tvOn) {
+                                  e.target.play().catch(err => console.log('Play prevented:', err));
+                                }
+                              }}
+                            />
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-950"></div>
+                    )}
+                    
+                    {showChannelInfo && (
+                      <div className="absolute bottom-16 left-4 bg-black bg-opacity-70 px-4 py-2 rounded pointer-events-none z-10">
+                        <p className="text-green-400 font-mono text-sm">CH {currentChannel}</p>
+                        <p className="text-green-400 font-mono text-xs">{currentChannelData.name}</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-6 flex justify-center gap-4">
+                    <button
+                      onClick={togglePower}
+                      className={`p-4 rounded-full transition-all ${
+                        tvOn 
+                          ? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/50' 
+                          : 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-500/50'
+                      }`}
+                    >
+                      <div className="w-6 h-6 text-white"><Power /></div>
+                    </button>
+                    {tvOn && (
+                      <button
+                        onClick={toggleFullscreen}
+                        className="p-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/50"
+                      >
+                        <div className="w-6 h-6 text-white"><Maximize /></div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-white font-mono mb-4">CHANNELS</h2>
+                {channels.map((channel) => (
+                  <button
+                    key={channel.id}
+                    onClick={() => handleChannelChange(channel.id)}
+                    className={`w-full p-4 rounded-lg font-mono transition-all ${
+                      currentChannel === channel.id
+                        ? 'bg-white text-black shadow-lg shadow-white/50'
+                        : 'bg-gray-800 text-white hover:bg-gray-700 hover:shadow-lg hover:shadow-white/30'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="text-left">
+                        <p className="font-bold text-lg">{channel.name}</p>
+                        <p className="text-sm opacity-80">{channel.description}</p>
+                      </div>
+                      <div className="text-3xl font-bold">{channel.id}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-16 border-t border-gray-700 pt-8">
+              <h2 className="text-3xl font-bold text-white font-mono mb-6">UPCOMING SCHEDULE</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {channels.map((channel) => (
+                  <div key={channel.id} className="bg-gray-900 rounded-lg border-2 border-gray-700 p-4">
+                    <h3 className="text-lg font-bold text-white font-mono mb-4 pb-2 border-b border-gray-600">CH {channel.id} - {channel.name}</h3>
+                    <div className="space-y-3">
+                      {channel.schedule.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="block p-3 bg-gray-800 rounded"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="text-green-400 font-mono text-sm">{formatScheduleTime(item.hour, item.minute)}</p>
+                          </div>
+                          <p className="text-white text-sm font-mono truncate">{item.title}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
 </body>
 </html>
