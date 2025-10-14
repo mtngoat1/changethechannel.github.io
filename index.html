@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +8,6 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#000000">
   <style>
     #emulator-container {
@@ -18,13 +16,6 @@
       min-height: 600px;
     }
   </style>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail:', err));
-    });
-  }
-</script>
 </head>
 <body>
   <div id="root"></div>
@@ -64,13 +55,6 @@
     const Play = () => (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polygon points="5 3 19 12 5 21 5 3"/>
-      </svg>
-    );
-
-    const Pause = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect width="4" height="16" x="6" y="4"/>
-        <rect width="4" height="16" x="14" y="4"/>
       </svg>
     );
 
@@ -132,34 +116,27 @@
     );
 
     const PLATFORMS = {
-      DOS: { name: 'DOS', ext: ['.exe', '.com', '.bat'], description: 'DOS/Windows 95 Games', core: 'dos' },
       NES: { name: 'NES', ext: ['.nes', '.zip'], description: 'Nintendo Entertainment System', core: 'nes' },
       SNES: { name: 'SNES', ext: ['.smc', '.sfc', '.zip'], description: 'Super Nintendo', core: 'snes' },
       GEN: { name: 'Genesis', ext: ['.md', '.gen', '.zip'], description: 'Sega Genesis', core: 'segaMD' },
       GB: { name: 'Game Boy', ext: ['.gb', '.gbc', '.zip'], description: 'Game Boy/Color', core: 'gb' },
-      PSX: { name: 'PlayStation', ext: ['.iso', '.cue', '.bin'], description: 'PlayStation 1', core: 'psx' },
-      N64: { name: 'N64', ext: ['.z64', '.n64', '.zip'], description: 'Nintendo 64', core: 'n64' },
       GBA: { name: 'GBA', ext: ['.gba', '.zip'], description: 'Game Boy Advance', core: 'gba' }
     };
 
     const EmulatorContainer = ({ game }) => {
       const [error, setError] = useState(null);
       const [loading, setLoading] = useState(true);
-      const emulatorInstanceRef = useRef(null);
       const containerIdRef = useRef(`emulator-${Date.now()}`);
 
       useEffect(() => {
         if (!game) return;
 
         const platformMap = {
-          'DOS': 'dos',
           'NES': 'nes',
           'SNES': 'snes',
           'Genesis': 'segaMD',
           'Game Boy': 'gb',
-          'GBA': 'gba',
-          'N64': 'n64',
-          'PlayStation': 'psx'
+          'GBA': 'gba'
         };
 
         const core = platformMap[game.platform];
@@ -170,62 +147,75 @@
         }
 
         let blobUrl = null;
+        let scriptElement = null;
 
         const initEmulator = async () => {
           try {
-            // Create blob from ArrayBuffer
-            const blob = new Blob([game.data], { type: 'application/octet-stream' });
-            blobUrl = URL.createObjectURL(blob);
-
-            console.log('Initializing emulator:', {
+            console.log('🎮 Starting emulator initialization...', {
               platform: game.platform,
               core: core,
               name: game.name,
               dataSize: game.data.byteLength
             });
 
-            // Clear any existing emulator instance
+            const blob = new Blob([game.data], { type: 'application/octet-stream' });
+            blobUrl = URL.createObjectURL(blob);
+            console.log('✅ Blob URL created:', blobUrl);
+
             const container = document.getElementById(containerIdRef.current);
             if (container) {
               container.innerHTML = '';
+              console.log('✅ Container cleared');
             }
 
-            // Configure EmulatorJS
+            // Remove old EmulatorJS script
+            const oldScript = document.querySelector('script[src*="EmulatorJS"]');
+            if (oldScript) {
+              oldScript.remove();
+              console.log('🗑️ Removed old emulator script');
+            }
+
+            // Clear old globals
+            delete window.EJS_player;
+            delete window.EJS_core;
+            delete window.EJS_gameName;
+            delete window.EJS_gameUrl;
+
+            // Set new config
             window.EJS_player = `#${containerIdRef.current}`;
             window.EJS_core = core;
             window.EJS_gameName = game.name;
             window.EJS_gameUrl = blobUrl;
             window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';
-            window.EJS_biosUrl = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/bios/';
             window.EJS_color = '#6B21A8';
             window.EJS_startOnLoaded = true;
-            window.EJS_RESET_VARS = true;
 
-            // Remove old script if exists
-            const oldScript = document.querySelector('script[src*="EmulatorJS"]');
-            if (oldScript) {
-              oldScript.remove();
-            }
+            console.log('✅ EmulatorJS config set:', {
+              player: window.EJS_player,
+              core: window.EJS_core,
+              gameUrl: window.EJS_gameUrl
+            });
 
             // Load EmulatorJS
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js';
+            scriptElement = document.createElement('script');
+            scriptElement.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js';
             
-            script.onload = () => {
-              console.log('EmulatorJS loaded successfully');
+            scriptElement.onload = () => {
+              console.log('✅ EmulatorJS script loaded successfully');
+              setTimeout(() => setLoading(false), 2000);
+            };
+
+            scriptElement.onerror = (e) => {
+              console.error('❌ Failed to load EmulatorJS script:', e);
+              setError('Failed to load emulator. Please try again.');
               setLoading(false);
             };
 
-            script.onerror = () => {
-              setError('Failed to load emulator script');
-              setLoading(false);
-            };
-
-            document.body.appendChild(script);
-            emulatorInstanceRef.current = script;
+            document.body.appendChild(scriptElement);
+            console.log('📦 EmulatorJS script added to page');
 
           } catch (err) {
-            console.error('Emulator initialization error:', err);
+            console.error('❌ Emulator initialization error:', err);
             setError('Failed to initialize: ' + err.message);
             setLoading(false);
           }
@@ -234,13 +224,13 @@
         initEmulator();
 
         return () => {
-          // Cleanup
+          console.log('🧹 Cleaning up emulator...');
           if (blobUrl) {
             URL.revokeObjectURL(blobUrl);
           }
           
-          if (emulatorInstanceRef.current && emulatorInstanceRef.current.parentNode) {
-            emulatorInstanceRef.current.remove();
+          if (scriptElement && scriptElement.parentNode) {
+            scriptElement.remove();
           }
 
           const container = document.getElementById(containerIdRef.current);
@@ -248,13 +238,10 @@
             container.innerHTML = '';
           }
 
-          // Clean up globals
           delete window.EJS_player;
           delete window.EJS_core;
           delete window.EJS_gameName;
           delete window.EJS_gameUrl;
-          delete window.EJS_pathtodata;
-          delete window.EJS_biosUrl;
         };
       }, [game]);
 
@@ -267,7 +254,7 @@
               <p className="text-sm mb-4">{error}</p>
               <p className="text-xs text-gray-500">Platform: {game.platform}</p>
               <p className="text-xs text-gray-500 mt-2">File: {game.name}</p>
-              <p className="text-xs text-gray-600 mt-4">Try a different ROM file</p>
+              <p className="text-xs text-gray-600 mt-4">Make sure you uploaded a valid ROM file</p>
             </div>
           </div>
         );
@@ -277,13 +264,13 @@
         <div className="w-full h-full bg-black rounded-lg border-4 border-purple-600 overflow-hidden relative" style={{ minHeight: '600px' }}>
           <div id={containerIdRef.current} className="w-full h-full" style={{ minHeight: '600px' }}></div>
           {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90">
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
               <div className="text-center text-purple-400 font-mono">
                 <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="text-xl mb-2">Loading Emulator...</p>
                 <p className="text-sm text-gray-400 mt-2">{game.name}</p>
                 <p className="text-xs text-gray-500 mt-1">Platform: {game.platform}</p>
-                <p className="text-xs text-gray-600 mt-4">This may take a moment...</p>
+                <p className="text-xs text-gray-600 mt-4">Check browser console (F12) for details</p>
               </div>
             </div>
           )}
@@ -316,7 +303,7 @@
         2: { videoIndex: 0, key: 0 },
         3: { videoIndex: 0, key: 0 },
         4: { videoIndex: 0, key: 0 },
-      }); 
+      });
 
       const channels = [
         {
@@ -325,20 +312,12 @@
           videos: [
             'https://www.dropbox.com/scl/fi/0qhbxc2b1owo9sxcxa0jd/nick-halloween-block.mp4?rlkey=xly50ft4owo9zv45atkvonbzu&st=7fzpqayr&raw=1',
             'https://www.dropbox.com/scl/fi/0kx6kuhz626w2ff5otupp/716-1.mp4?rlkey=yna7t1kngnjopq9rwo0mej2dt&st=sju64tr4&raw=1',
-            'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&st=p9ywopri&raw=1',
-            'https://www.dropbox.com/scl/fi/jwhoxq74sdlgn6e3flsyg/Spongebob-Graveyard-Shift-Airing.mp4?rlkey=inxptpawamqbt1jwwoh9anol3&st=5u7fkp8q&raw=1',
-            'https://www.dropbox.com/scl/fi/dsi4esqdoz14952m4hzq4/Jimmy-Neutron-Marathon-June-21-2007-Disc-1.mp4?rlkey=zw3e6wshthzbvihrksm099nl0&st=oxem21rb&raw=1',
-            'https://www.dropbox.com/scl/fi/ikjg2dgcnou5voskzlali/7h9-F-ir1y-066p-r9n15-Ch-nn91-Ch-59r5-1.mp4?rlkey=ffmvjedudj9lu2kz5h3ihw6l4&st=rehd0ni2&raw=1',
-            'https://www.dropbox.com/scl/fi/d0k90sw5vrzstwy10az71/716-2.mp4?rlkey=z4487ctdhorhj47514cnh5xq1&st=nqxoo09x&raw=1'
+            'https://www.dropbox.com/scl/fi/t5pgzd4lqd10pmcnfi5su/Spongebob-The-Sponge-Who-Could-Fly.mp4?rlkey=qzvvvdihnqa82glbn2uy2ve3c&st=p9ywopri&raw=1'
           ],
           schedule: [
             { title: 'Nick Halloween', hour: 12, minute: 0, videoIndex: 0 },
             { title: 'SpongeBash Special', hour: 2, minute: 45, videoIndex: 1 },
-            { title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 },
-            { title: 'Graveyard Shift', hour: 5, minute: 10, videoIndex: 3 },
-            { title: 'Jimmy Neutron Marathon', hour: 5, minute: 35, videoIndex: 4 },
-            { title: 'Fairly Odd Parents Marathon', hour: 7, minute: 35, videoIndex: 5 },
-            { title: 'SpongeBash Special 2 ', hour: 9, minute: 50, videoIndex: 6 }
+            { title: 'The Sponge Who Could Fly', hour: 4, minute: 45, videoIndex: 2 }
           ]
         },
         {
@@ -346,123 +325,14 @@
           name: 'CARTOON NETWORK',
           videos: [
             'https://www.dropbox.com/scl/fi/v88t8aoxt17uh1pqo42ch/live_user_livetoons10_1357606766.flv.mp4?rlkey=6w7m1ee8qfwstww3m8g25hmin&st=plw085je&raw=1',
-            'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&st=oaxb01u2&raw=1', 
-            'https://www.dropbox.com/scl/fi/v5fizu9tb9yqbt3aj3ryk/live_user_livetoons10_1358816393.mp4?rlkey=55prgq8uk3ifvfw9vxgdvh3d3&st=oyva12v1&raw=1',
-            'https://www.dropbox.com/scl/fi/bn20pbb91s26lzbdmwvkh/live_user_livetoons10_1358899176.mp4?rlkey=92kekb0yvufcyh7j2clbrro8t&st=hfqsjpaq&raw=1',
-            'https://www.dropbox.com/scl/fi/fsrn8w8bxchbwecrogy16/live_user_livetoons10_1359421185.flv.mp4?rlkey=pek6z0ep4as5qkhvmoccf346t&st=x4hvp8c0&raw=1',
-            'https://www.dropbox.com/scl/fi/02rg3k5paas5fiexosn0m/VTS_01_1.mp4?rlkey=2id1qj9codi3ql3rdztvyvbly&st=1liizih6&raw=1',
-            'https://www.dropbox.com/scl/fi/qovomj0q2v7rmu5gxboka/VTS_02_1.mp4?rlkey=9qbxn4wcnm8q2e3l2f3bjz66r&st=bwh2598s&raw=1',
-            'https://www.dropbox.com/scl/fi/21yepjjlti1jfz5grh8e2/VTS_02_2.mp4?rlkey=tstp73n8kyg8lb8ms2azjoadi&st=j21ztx3n&raw=1',
-            'https://www.dropbox.com/scl/fi/ypz45myxzj356cd5mcjro/Tape-25-CARTOON-NETWORK-BOOMERANG-VOL.-2-2012-2013-2015-PART-1.mp4?rlkey=bdwdjccljg2ie4te0472o9ulw&st=wflfyq3v&raw=1'
+            'https://www.dropbox.com/scl/fi/wztbfclfemuhwyzmns5sr/live_user_livetoons10_1358211514.mp4?rlkey=6qbndxzqlwz3w2js4ggim7us2&st=oaxb01u2&raw=1'
           ],
           schedule: [
             { title: 'Regular Show', hour: 12, minute: 0, videoIndex: 0 },
-            { title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 },
-            { title: 'Regular Show', hour: 1, minute: 0, videoIndex: 2 },
-            { title: 'The Amazing World Of Gumball', hour: 1, minute: 30, videoIndex: 3 },
-            { title: 'Regular Show', hour: 2, minute: 0, videoIndex: 4 },
-            { title: 'Chowder', hour: 2, minute: 30, videoIndex: 5 },
-            { title: 'Chowder/Flapjack', hour: 3, minute: 0, videoIndex: 6 },
-            { title: 'Flapjack', hour: 3, minute: 20, videoIndex: 7 },
-            { title: 'Fosters Home for Imaginary Friends', hour: 3, minute: 40, videoIndex: 8 },
-          ]
-        },
-        {
-          id: 3,
-          name: 'ADULT SWIM',
-          videos: [
-            'https://www.dropbox.com/scl/fi/r3f7o7ij3p92wskw2txf2/z303-as026-_Adult_Swim_07.03.05-1.mp4?rlkey=ho4zmqo62b6pjfxcrbyemf477&st=527poo3c&raw=1',
-            'https://www.dropbox.com/scl/fi/fhffgqtmtsl6wspuhwz75/VTS_01_3.mp4?rlkey=rm7c9qv28gawzrowp0nf87f8y&st=4mi06aoj&raw=1',
-            'https://www.dropbox.com/scl/fi/ygggf6j7ca30z3j6g37a9/Family-Guy-Myspleen-003.mp4?rlkey=jjnzgc6fawyvu5ay11uhqljc7&st=i1dcvxal&raw=1',
-            'https://www.dropbox.com/scl/fi/odjks7bqt4g1evpp35pi3/Family-Guy-Myspleen-007.mp4?rlkey=piqclzcgr4jzxnod6mh8m05ck&st=m67vvjd7&raw=1',
-            'https://www.dropbox.com/scl/fi/qaac0rhj03k0rex4cf6oe/Family-Guy-Myspleen-74.mp4?rlkey=0vdk9u02pgqu7lqumdxg8a2fz&st=5sn28zoe&raw=1'
-          ],
-          schedule: [
-            { title: 'Family Guy', hour: 22, minute: 0, videoIndex: 0 },
-            { title: 'American Dad', hour: 22, minute: 30, videoIndex: 1 },
-            { title: 'Futurama/Aqua Teen Hunger Force', hour: 23, minute: 30, videoIndex: 2 },
-            { title: 'Family Guy', hour: 24, minute: 0, videoIndex: 3 },
-            { title: 'Family Guy', hour: 24, minute: 30, videoIndex: 4 },
-            { title: 'Family Guy', hour: 25, minute: 0, videoIndex: 5 }
-          ]
-        },
-        {
-          id: 4,
-          name: 'DISNEY',
-          videos: [
-            'https://www.dropbox.com/scl/fi/ojk72t6fu6xqsh6ifka6q/The-Suite-Life-of-Zack-amp-Cody-Big-Hair-and-Baseball-2009-11-16-0.mp4?rlkey=rfl2qldsr6tvct4i63ejjn1ol&st=jjhwel09&raw=1',
-            'https://www.dropbox.com/scl/fi/g327hug98rglpr0up48dx/Kick.Buttowski.Suburban.Daredevil.S01E39E40.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=0tzfsp95ifnf61zl5jqtcebsx&st=ww6q42lf&raw=1',
-            'https://www.dropbox.com/scl/fi/40tp46lyqrw1d3oqx0o68/Kick.Buttowski.Suburban.Daredevil.S01E35E36.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.ia.mp4?rlkey=4ixrvdv5tzcan0s86nnqhn9ym&st=w0wa9y7v&raw=1',
-            'https://www.dropbox.com/scl/fi/u89sv95hzxwv61jwovv7a/Kick.Buttowski.Suburban.Daredevil.S01E21E22.1080p.DSNP.WEB-DL.AAC2.0.H.264-LAZY.mp4?rlkey=2snodpvkhaar86nhfuluw0tc3&st=cliv6uro&raw=1',
-            'https://www.dropbox.com/scl/fi/cmn3685iwl94qvrusl2wh/Good-Luck-Charlie-2010-S02E05.mp4?rlkey=3l9wogldnw0675004atsf5r1j&st=c5bd1x6f&raw=1',
-            'https://www.dropbox.com/scl/fi/bsnxykphfw9ct5u9d96wj/Good-Luck-Charlie-2010-S02E02.mp4?rlkey=y6k78wel1izytirw2q7vgnj1l&st=fwjhv1oi&raw=1',
-            'https://www.dropbox.com/scl/fi/kqrwtgsdmzogyphnx4swn/videoplayback-3.mp4?rlkey=99aqvdg830spb90g2e4vtt8m3&st=ocfr38ol&raw=1',
-            'https://www.dropbox.com/scl/fi/iklezqsorssrijrlo6wh6/Good-Luck-Charlie-2010-S02E01.mp4?rlkey=dam28lh70i0zprb37f5565osx&st=o35exo8h&raw=1',
-            'https://www.dropbox.com/scl/fi/1ciywqxo7wfqmzx1bsck3/S1E13-Boss-Mabel.ia.mp4?rlkey=eseuishqjjy66aioo55clpb07&st=n8m1fr0s&raw=1',
-            'https://www.dropbox.com/scl/fi/vyr4pdh5pi8e7b28k3vqi/S1E12-Summerween.ia.mp4?rlkey=rgoh7q0oybimdgkeezp08yfus&st=cf1lvmcn&raw=1',
-            'https://www.dropbox.com/scl/fi/hse4mqdv02vl81ra1bts0/Phineas-and-Ferb-S02E21-E22-Lets-Take-a-Quiz-At-the-Car-Wash-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=au6mvrf2itnchejqq1sog1sc2&st=b7q83kcb&raw=1',
-            'https://www.dropbox.com/scl/fi/4q9jskzualah6fgvbjzhz/Phineas-and-Ferb-S02E30-E31-Not-Phineas-and-Ferb-Phineas-and-Ferb-Busters-1080p-WEB-DL-x265-HEVC-10bit-AAC-2.0-RCVR-UTR.mkv?rlkey=52cnp23o1t1yvtaz2m76akvtg&st=16x7bq0i&raw=1'
-          ],
-          schedule: [
-            { title: 'Suite Life of Zack & Cody', hour: 8, minute: 0, videoIndex: 0 },
-            { title: 'Kick Buttowski', hour: 8, minute: 30, videoIndex: 2 },
-            { title: 'Kick Buttowski', hour: 9, minute: 0, videoIndex: 3 },
-            { title: 'Kick Buttowski', hour: 9, minute: 30, videoIndex: 4 },
-            { title: 'Good Luck Charlie', hour: 10, minute: 0, videoIndex: 5 },
-            { title: 'Good Luck Charlie', hour: 10, minute: 30, videoIndex: 6},
-            { title: 'Good Luck Charlie', hour: 11, minute: 0, videoIndex: 7},
-            { title: 'Gravity Falls', hour: 11, minute: 0, videoIndex: 8},
-            { title: 'Gravity Falls', hour: 11, minute: 30, videoIndex: 9},
-            { title: 'Phineas and Ferb', hour: 12, minute: 0, videoIndex: 10},
-            { title: 'Phineas and Ferb', hour: 12, minute: 30, videoIndex: 11}
+            { title: 'Regular Show', hour: 12, minute: 30, videoIndex: 1 }
           ]
         }
       ];
-
-      const formatScheduleTime = (hour, minute) => {
-        const period = hour >= 12 ? 'PM' : 'AM';
-        const displayHour = hour % 12 || 12;
-        const displayMinute = minute.toString().padStart(2, '0');
-        return `${displayHour}:${displayMinute} ${period}`;
-      };
-
-      const getCurrentShow = (channelId) => {
-        const channel = channels.find(ch => ch.id === channelId);
-        if (!channel) return null;
-        
-        const now = new Date();
-        const currentMinutes = now.getHours() * 60 + now.getMinutes();
-        
-        let currentShow = null;
-        for (let i = 0; i < channel.schedule.length; i++) {
-          const showMinutes = channel.schedule[i].hour * 60 + channel.schedule[i].minute;
-          const nextShowMinutes = i < channel.schedule.length - 1 
-            ? channel.schedule[i + 1].hour * 60 + channel.schedule[i + 1].minute
-            : 24 * 60;
-          
-          if (currentMinutes >= showMinutes && currentMinutes < nextShowMinutes) {
-            currentShow = channel.schedule[i];
-            break;
-          }
-        }
-        
-        return currentShow;
-      };
-
-      const handleScheduleClick = (channelId, videoIndex) => {
-        setCurrentChannel(channelId);
-        setChannelStates(prev => ({
-          ...prev,
-          [channelId]: {
-            videoIndex: videoIndex,
-            key: prev[channelId].key + 1
-          }
-        }));
-        setShowChannelInfo(true);
-        if (!tvOn) {
-          setTvOn(true);
-        }
-      };
 
       const rollUsername = () => {
         setIsRollingUser(true);
@@ -509,23 +379,6 @@
         setTvOn(!tvOn);
       };
 
-      const toggleFullscreen = () => {
-        const element = containerRef.current;
-        if (element) {
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-          }
-        }
-      };
-
-      const currentChannelData = channels.find(ch => ch.id === currentChannel);
-
       const handleVideoEnd = (channelId) => {
         const channel = channels.find(ch => ch.id === channelId);
         const nextIndex = (channelStates[channelId].videoIndex + 1) % channel.videos.length;
@@ -542,27 +395,28 @@
         const files = Array.from(e.target.files);
         const platform = PLATFORMS[platformKey];
         
+        console.log('📁 Uploading files:', files.map(f => f.name));
+        
         files.forEach(file => {
-          setUploadProgress(Math.random() * 50);
-          setTimeout(() => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              const gameData = {
-                name: file.name,
-                platform: platform.name,
-                platformKey: platformKey,
-                data: event.target.result,
-                id: `${platformKey}-${Date.now()}-${Math.random()}`
-              };
-              setArcadeGames(prev => ({
-                ...prev,
-                [platformKey]: [...(prev[platformKey] || []), gameData]
-              }));
+          setUploadProgress(50);
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const gameData = {
+              name: file.name,
+              platform: platform.name,
+              platformKey: platformKey,
+              data: event.target.result,
+              id: `${platformKey}-${Date.now()}-${Math.random()}`
             };
-            reader.readAsArrayBuffer(file);
+            console.log('✅ Game uploaded:', gameData.name, 'Size:', gameData.data.byteLength, 'bytes');
+            setArcadeGames(prev => ({
+              ...prev,
+              [platformKey]: [...(prev[platformKey] || []), gameData]
+            }));
             setUploadProgress(100);
             setTimeout(() => setUploadProgress(0), 1000);
-          }, 500);
+          };
+          reader.readAsArrayBuffer(file);
         });
         if (fileInputRef.current) fileInputRef.current.value = '';
       };
@@ -579,6 +433,7 @@
       };
 
       const launchArcadeGame = (game) => {
+        console.log('🚀 Launching game:', game.name);
         setRunningGame(game);
         setArcadeView('playing');
       };
@@ -593,9 +448,7 @@
           Object.keys(channelVideoRefs.current).forEach(channelId => {
             const video = channelVideoRefs.current[channelId];
             if (video) {
-              video.play().catch(err => {
-                console.log('Play was prevented:', err);
-              });
+              video.play().catch(err => console.log('Play prevented:', err));
             }
           });
         } else {
@@ -719,7 +572,7 @@
         );
       }
 
-      if (showArcade && arcadeView === 'library') {
+      if (showArcade) {
         return (
           <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4 overflow-y-auto">
             <div className="bg-gray-900 rounded-lg border-4 border-purple-600 p-8 max-w-6xl w-full my-8">
@@ -736,7 +589,7 @@
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-8">
                 {Object.entries(PLATFORMS).map(([key, platform]) => (
                   <button
                     key={key}
@@ -761,7 +614,7 @@
                     </h2>
                     <label className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-mono cursor-pointer flex items-center gap-2 transition-colors">
                       <div className="w-5 h-5"><Upload /></div>
-                      UPLOAD
+                      UPLOAD ROM
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -791,7 +644,7 @@
                         >
                           <div className="flex-1">
                             <p className="text-white font-mono font-bold">{game.name}</p>
-                            <p className="text-gray-300 text-sm font-mono">Ready to play</p>
+                            <p className="text-gray-300 text-sm font-mono">Ready to play • {(game.data.byteLength / 1024 / 1024).toFixed(2)} MB</p>
                           </div>
                           <div className="flex gap-2">
                             <button
@@ -812,8 +665,9 @@
                       ))
                     ) : (
                       <div className="text-center py-8 text-gray-400 font-mono">
-                        <p>No games uploaded for {PLATFORMS[selectedArcadePlatform].name}</p>
-                        <p className="text-sm mt-2">Upload {PLATFORMS[selectedArcadePlatform].ext.join(' or ')} files above</p>
+                        <p className="text-lg mb-2">No games uploaded for {PLATFORMS[selectedArcadePlatform].name}</p>
+                        <p className="text-sm">Upload {PLATFORMS[selectedArcadePlatform].ext.join(' or ')} files above</p>
+                        <p className="text-xs mt-4 text-gray-500">💡 Tip: You need to provide your own ROM files</p>
                       </div>
                     )}
                   </div>
@@ -822,7 +676,7 @@
 
               {Object.keys(arcadeGames).length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white font-mono mb-4">ALL GAMES</h2>
+                  <h2 className="text-2xl font-bold text-white font-mono mb-4">ALL GAMES ({Object.values(arcadeGames).flat().length})</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {Object.entries(arcadeGames).map(([platform, gameList]) =>
                       gameList.map(game => (
@@ -914,7 +768,7 @@
                     {showChannelInfo && (
                       <div className="absolute bottom-16 left-4 bg-black bg-opacity-70 px-4 py-2 rounded pointer-events-none z-10">
                         <p className="text-green-400 font-mono text-sm">CH {currentChannel}</p>
-                        <p className="text-green-400 font-mono text-xs">{currentChannelData.name}</p>
+                        <p className="text-green-400 font-mono text-xs">{channels.find(c => c.id === currentChannel)?.name}</p>
                       </div>
                     )}
                   </div>
@@ -930,14 +784,6 @@
                     >
                       <div className="w-6 h-6 text-white"><Power /></div>
                     </button>
-                    {tvOn && (
-                      <button
-                        onClick={toggleFullscreen}
-                        className="p-4 rounded-full bg-blue-600 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/50"
-                      >
-                        <div className="w-6 h-6 text-white"><Maximize /></div>
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
@@ -957,35 +803,10 @@
                     <div className="flex items-center justify-between">
                       <div className="text-left">
                         <p className="font-bold text-lg">{channel.name}</p>
-                        <p className="text-sm opacity-80">{channel.description}</p>
                       </div>
                       <div className="text-3xl font-bold">{channel.id}</div>
                     </div>
                   </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-16 border-t border-gray-700 pt-8">
-              <h2 className="text-3xl font-bold text-white font-mono mb-6">UPCOMING SCHEDULE</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {channels.map((channel) => (
-                  <div key={channel.id} className="bg-gray-900 rounded-lg border-2 border-gray-700 p-4">
-                    <h3 className="text-lg font-bold text-white font-mono mb-4 pb-2 border-b border-gray-600">CH {channel.id} - {channel.name}</h3>
-                    <div className="space-y-3">
-                      {channel.schedule.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="block p-3 bg-gray-800 rounded"
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <p className="text-green-400 font-mono text-sm">{formatScheduleTime(item.hour, item.minute)}</p>
-                          </div>
-                          <p className="text-white text-sm font-mono truncate">{item.title}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 ))}
               </div>
             </div>
