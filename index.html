@@ -192,15 +192,28 @@
             // Wait for cleanup
             await new Promise(resolve => setTimeout(resolve, 500));
 
+            // WORKAROUND: Define missing GamepadHandler class
+            if (!window.GamepadHandler) {
+              window.GamepadHandler = class {
+                constructor() {
+                  this.gamepads = {};
+                }
+                poll() {}
+                getGamepad() { return null; }
+              };
+              console.log('✅ GamepadHandler polyfill added');
+            }
+
             // Set fresh config
             window.EJS_player = `#${containerIdRef.current}`;
             window.EJS_core = core;
             window.EJS_gameName = game.name;
             window.EJS_gameUrl = blobUrl;
-            window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';
+            window.EJS_pathtodata = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@4.0.8/data/';
             window.EJS_color = '#6B21A8';
             window.EJS_startOnLoaded = true;
             window.EJS_RESET_VARS = true;
+            window.EJS_gamepadPolyfill = true;
 
             console.log('✅ EmulatorJS config set:', {
               player: window.EJS_player,
@@ -208,22 +221,23 @@
               gameUrl: blobUrl.substring(0, 50) + '...'
             });
 
-            // Load fresh EmulatorJS with cache busting
+            // Load fresh EmulatorJS - NO cache busting to avoid double loading
             const script = document.createElement('script');
-            script.src = `https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js?t=${Date.now()}`;
+            script.src = 'https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@4.0.8/data/loader.js';
             script.id = 'emulator-loader';
             
             script.onload = () => {
               console.log('✅ EmulatorJS script loaded successfully');
+              // Give it more time to fully initialize
               setTimeout(() => {
                 setLoading(false);
                 console.log('🎮 Emulator should be running now');
-              }, 3000);
+              }, 4000);
             };
 
             script.onerror = (e) => {
               console.error('❌ Failed to load EmulatorJS script:', e);
-              setError('Failed to load emulator library');
+              setError('Failed to load emulator library. Try refreshing the page.');
               setLoading(false);
             };
 
@@ -323,7 +337,7 @@
         4: { videoIndex: 0, key: 0 },
       });
 
-            const channels = [
+      const channels = [
         {
           id: 1,
           name: 'NICKELODEON',
