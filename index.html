@@ -7,8 +7,8 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="2575.6">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #f7f6ef; -webkit-text-stroke: #f7f6ef}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #f7f6ef; -webkit-text-stroke: #f7f6ef; min-height: 14.0px}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px '.AppleSystemUIFontMonospaced'; color: #f9f8f2; -webkit-text-stroke: #f9f8f2; background-color: #ffffff; background-color: rgba(255, 255, 255, 0)}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px '.AppleSystemUIFontMonospaced'; color: #f9f8f2; -webkit-text-stroke: #f9f8f2; background-color: #ffffff; background-color: rgba(255, 255, 255, 0); min-height: 15.0px}
     span.s1 {font-kerning: none}
   </style>
 </head>
@@ -24,7 +24,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/@ruffle-rs/ruffle"&gt;&lt;/script&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;link rel="manifest" href="/manifest.json"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#000000"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
@@ -335,28 +334,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>);</span></p>
 <p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Built-in game library with SWF files</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const BUILT_IN_GAMES = [</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>id: 'sb-bowling',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>name: 'SpongeBob Bowling',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>swf: 'http://nostalgiakidssites.com/nick20042005/games/sports/sb_bowling.swf',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>icon: 'https://via.placeholder.com/150/FFD700/000000?text=SB+Bowl'</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>},</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>id: 'sb-jellyfishing',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>name: 'SpongeBob Jellyfishing',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>swf: 'http://nostalgiakidssites.com/nick20042005/games/arcade/sb_jellyfishing.swf',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>icon: 'https://via.placeholder.com/150/FF69B4/000000?text=SB+Jelly'</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>},</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>id: 'danny-phantom',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>name: 'Danny Phantom Game',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>swf: 'http://nostalgiakidssites.com/nick20042005/games/action/dp_game.swf',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>icon: 'https://via.placeholder.com/150/00CED1/000000?text=Danny'</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const PLATFORMS = {</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>DOS: { name: 'DOS', ext: ['.exe', '.com', '.bat'], description: 'DOS/Windows 95 Games', core: 'dos' },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>NES: { name: 'NES', ext: ['.nes', '.zip'], description: 'Nintendo Entertainment System', core: 'nes' },</span></p>
@@ -366,70 +343,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>PSX: { name: 'PlayStation', ext: ['.iso', '.cue', '.bin'], description: 'PlayStation 1', core: 'psx' },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>N64: { name: 'N64', ext: ['.z64', '.n64', '.zip'], description: 'Nintendo 64', core: 'n64' },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>GBA: { name: 'GBA', ext: ['.gba', '.zip'], description: 'Game Boy Advance', core: 'gba' }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const RufflePlayer = ({ swfUrl, gameName }) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const containerRef = useRef(null);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [loading, setLoading] = useState(true);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [error, setError] = useState(null);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const loadGame = async () =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>try {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!containerRef.current) return;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const ruffle = window.RufflePlayer.newest();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const player = ruffle.createPlayer();</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>containerRef.current.innerHTML = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>containerRef.current.appendChild(player);</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>player.style.width = '100%';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>player.style.height = '100%';</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>await player.load(swfUrl);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setLoading(false);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>} catch (err) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setError('Failed to load game: ' + err.message);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setLoading(false);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>loadGame();</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return () =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>if (containerRef.current) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>containerRef.current.innerHTML = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}, [swfUrl]);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (error) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="w-full h-full bg-gray-950 rounded-lg border-4 border-red-600 flex items-center justify-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="text-center text-red-400 font-mono p-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="text-2xl mb-4"&gt;⚠️&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="mb-2 text-lg"&gt;Error Loading Game&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="text-sm mb-4"&gt;{error}&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="w-full h-full bg-black rounded-lg border-4 border-purple-600 overflow-hidden relative" style={{ minHeight: '600px' }}&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div ref={containerRef} className="w-full h-full" style={{ minHeight: '600px' }}&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{loading &amp;&amp; (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="text-center text-purple-400 font-mono"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p className="text-xl mb-2"&gt;Loading Game...&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p className="text-sm text-gray-400 mt-2"&gt;{gameName}&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
 <p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const EmulatorContainer = ({ game }) =&gt; {</span></p>
@@ -628,6 +541,12 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 gap-6"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-gray-700 rounded p-6 h-64 border-2 border-dashed border-gray-600 flex items-center justify-center"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="text-center text-gray-500"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-lg font-mono"&gt;Image Placeholder 1&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-sm"&gt;800x400&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-gray-700 rounded p-6 h-64 border-2 border-dashed border-gray-600 flex items-center justify-center"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="text-center text-gray-500"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-lg font-mono"&gt;Image Placeholder 2&lt;/p&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-sm"&gt;800x400&lt;/p&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
@@ -700,7 +619,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>);</span></p>
 <p class="p1"><span class="s1">};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function App() {</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [isLoggedIn, setIsLoggedIn] = useState(false);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [username, setUsername] = useState('');</span></p>
@@ -718,7 +636,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [arcadeGames, setArcadeGames] = useState({});</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [uploadProgress, setUploadProgress] = useState(0);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [runningGame, setRunningGame] = useState(null);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [runningFlashGame, setRunningFlashGame] = useState(null);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const containerRef = useRef(null);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const channelVideoRefs = useRef({});</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const fileInputRef = useRef(null);</span></p>
@@ -855,8 +772,10 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>id: 6,</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>name: 'NICK JR',</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>videos: [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Add your Nick Jr video links here</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>],</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>schedule: [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Add your Nick Jr schedule here</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>]</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>];</span></p>
@@ -994,17 +913,11 @@
 <p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const launchArcadeGame = (game) =&gt; {</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setRunningGame(game);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setArcadeView('playing-emulator');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const launchFlashGame = (game) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setRunningFlashGame(game);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setArcadeView('playing-flash');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setArcadeView('playing');</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
 <p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const closeArcadeGame = () =&gt; {</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setRunningGame(null);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setRunningFlashGame(null);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setArcadeView('library');</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
 <p class="p2"><span class="s1"></span><br></p>
@@ -1116,29 +1029,7 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
 <p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (showArcade &amp;&amp; arcadeView === 'playing-flash') {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="fixed inset-0 bg-black z-50 flex flex-col"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-gray-900 border-b-2 border-purple-600 p-4 flex justify-between items-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center gap-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="w-6 h-6 text-purple-400"&gt;&lt;Gamepad2 /&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span className="text-white font-mono font-bold"&gt;{runningFlashGame.name}&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>onClick={closeArcadeGame}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>className="p-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="w-6 h-6"&gt;&lt;X /&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex-1 flex items-center justify-center bg-black p-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;RufflePlayer swfUrl={runningFlashGame.swf} gameName={runningFlashGame.name} /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (showArcade &amp;&amp; arcadeView === 'playing-emulator') {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (showArcade &amp;&amp; arcadeView === 'playing') {</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return (</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="fixed inset-0 bg-black z-50 flex flex-col"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-gray-900 border-b-2 border-purple-600 p-4 flex justify-between items-center"&gt;</span></p>
@@ -1176,29 +1067,6 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>CLOSE</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="mb-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h3 className="text-2xl font-bold text-orange-400 font-mono mb-4"&gt;🎮 FLASH GAMES&lt;/h3&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>{BUILT_IN_GAMES.map(game =&gt; (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div key={game.id} className="bg-gray-800 rounded-lg border-2 border-gray-700 overflow-hidden hover:border-orange-500 transition-colors"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="h-40 bg-gray-700 flex items-center justify-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;img src={game.icon} alt={game.name} className="w-full h-full object-cover" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="p-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p className="text-white font-mono font-bold mb-3"&gt;{game.name}&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                          </span>onClick={() =&gt; launchFlashGame(game)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                          </span>className="w-full px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded font-mono text-sm flex items-center justify-center gap-2 transition-colors"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;div className="w-4 h-4"&gt;&lt;Play /&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                          </span>PLAY</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>))}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
 <p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8"&gt;</span></p>
@@ -1287,7 +1155,7 @@
 <p class="p2"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>{Object.keys(arcadeGames).length &gt; 0 &amp;&amp; (</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;h2 className="text-2xl font-bold text-white font-mono mb-4"&gt;ALL UPLOADED GAMES&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;h2 className="text-2xl font-bold text-white font-mono mb-4"&gt;ALL GAMES&lt;/h2&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>{Object.entries(arcadeGames).map(([platform, gameList]) =&gt;</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>gameList.map(game =&gt; (</span></p>
